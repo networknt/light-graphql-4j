@@ -25,9 +25,9 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>graphql-security</artifactId>
+    <artifactId>graphql-router</artifactId>
     <packaging>jar</packaging>
-    <description>A security module that contains all handlers to protect your graphql endpoint</description>
+    <description>A route handler for GraphQL endpoint</description>
 
     <dependencies>
         <dependency>
@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>com.networknt</groupId>
-            <artifactId>security</artifactId>
+            <artifactId>server</artifactId>
         </dependency>
         <dependency>
             <groupId>com.networknt</groupId>

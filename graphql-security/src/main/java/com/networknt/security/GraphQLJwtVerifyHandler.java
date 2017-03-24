@@ -43,8 +43,8 @@ import java.util.Optional;
 /**
  * Created by steve on 01/09/16.
  */
-public class JwtVerifyHandler implements MiddlewareHandler {
-    static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandler.class);
+public class GraphQLJwtVerifyHandler implements MiddlewareHandler {
+    static final Logger logger = LoggerFactory.getLogger(GraphQLJwtVerifyHandler.class);
 
     static final String ENABLE_VERIFY_SCOPE = "enableVerifyScope";
 
@@ -62,7 +62,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
 
     private volatile HttpHandler next;
 
-    public JwtVerifyHandler() {}
+    public GraphQLJwtVerifyHandler() {}
 
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
@@ -235,7 +235,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(JwtVerifyHandler.class.getName(), config, null);
+        ModuleRegistry.registerModule(GraphQLJwtVerifyHandler.class.getName(), config, null);
     }
 
 }

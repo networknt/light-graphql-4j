@@ -42,8 +42,8 @@ import java.util.Map;
 /**
  * Created by steve on 01/09/16.
  */
-public class JwtVerifyHandlerTest {
-    static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandlerTest.class);
+public class GraphQLJwtVerifyHandlerTest {
+    static final Logger logger = LoggerFactory.getLogger(GraphQLJwtVerifyHandlerTest.class);
 
     static Undertow server = null;
 
@@ -52,7 +52,7 @@ public class JwtVerifyHandlerTest {
         if(server == null) {
             logger.info("starting server");
             HttpHandler handler = getTestHandler();
-            JwtVerifyHandler jwtVerifyHandler = new JwtVerifyHandler();
+            GraphQLJwtVerifyHandler jwtVerifyHandler = new GraphQLJwtVerifyHandler();
             jwtVerifyHandler.setNext(handler);
             SwaggerHandler swaggerHandler = new SwaggerHandler();
             swaggerHandler.setNext(jwtVerifyHandler);
