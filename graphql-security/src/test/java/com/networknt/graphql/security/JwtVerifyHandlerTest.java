@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.networknt.security;
+package com.networknt.graphql.security;
 
-import com.networknt.swagger.SwaggerHandler;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
@@ -42,8 +41,8 @@ import java.util.Map;
 /**
  * Created by steve on 01/09/16.
  */
-public class GraphQLJwtVerifyHandlerTest {
-    static final Logger logger = LoggerFactory.getLogger(GraphQLJwtVerifyHandlerTest.class);
+public class JwtVerifyHandlerTest {
+    static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandlerTest.class);
 
     static Undertow server = null;
 
@@ -52,13 +51,11 @@ public class GraphQLJwtVerifyHandlerTest {
         if(server == null) {
             logger.info("starting server");
             HttpHandler handler = getTestHandler();
-            GraphQLJwtVerifyHandler jwtVerifyHandler = new GraphQLJwtVerifyHandler();
+            JwtVerifyHandler jwtVerifyHandler = new JwtVerifyHandler();
             jwtVerifyHandler.setNext(handler);
-            SwaggerHandler swaggerHandler = new SwaggerHandler();
-            swaggerHandler.setNext(jwtVerifyHandler);
             server = Undertow.builder()
                     .addHttpListener(8080, "localhost")
-                    .setHandler(swaggerHandler)
+                    .setHandler(jwtVerifyHandler)
                     .build();
             server.start();
         }
@@ -111,7 +108,7 @@ public class GraphQLJwtVerifyHandlerTest {
             e.printStackTrace();
         }
     }
-
+    /*
     @Test
     public void testUnmatchedScopeInIdToken() throws Exception {
         String url = "http://localhost:8080/v2/pet/111";
@@ -130,5 +127,5 @@ public class GraphQLJwtVerifyHandlerTest {
             e.printStackTrace();
         }
     }
-
+    */
 }

@@ -16,7 +16,6 @@ public class GraphQLRouter implements HandlerProvider {
                 .add(Methods.GET, "/graphql", new GraphQLGetHandler())
                 .add(Methods.POST, "/graphql", new GraphQLPostHandler())
                 .add(Methods.GET, "/server/info", new ServerInfoGetHandler())
-
                 ;
     }
 

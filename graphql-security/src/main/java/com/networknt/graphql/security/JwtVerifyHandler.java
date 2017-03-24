@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package com.networknt.security;
+package com.networknt.graphql.security;
 
 import com.networknt.config.Config;
 import com.networknt.handler.MiddlewareHandler;
+import com.networknt.security.JwtHelper;
 import com.networknt.status.Status;
-import com.networknt.swagger.*;
 import com.networknt.utility.Constants;
 import com.networknt.exception.ExpiredTokenException;
 import com.networknt.utility.ModuleRegistry;
-import io.swagger.models.*;
 import io.undertow.Handlers;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -38,13 +37,21 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
+ * This is the JWT token verifier for GraphQL. Given there is no OpenAPI spec available for
+ * scopes, we have to verify the scope just based on query and mutation which is read and write.
+ *
+ * Regarding to the authorization, GraphQL spec doesn't have anything built-in and it is
+ * recommended to handle at the business logic layer. As we are trying to address the cross-cutting
+ * concerns at middleware level within the framework, we don't want to inject anything extra into
+ * the schema for authorization.
+ *
  * Created by steve on 01/09/16.
+ *
  */
-public class GraphQLJwtVerifyHandler implements MiddlewareHandler {
-    static final Logger logger = LoggerFactory.getLogger(GraphQLJwtVerifyHandler.class);
+public class JwtVerifyHandler implements MiddlewareHandler {
+    static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandler.class);
 
     static final String ENABLE_VERIFY_SCOPE = "enableVerifyScope";
 
@@ -62,7 +69,7 @@ public class GraphQLJwtVerifyHandler implements MiddlewareHandler {
 
     private volatile HttpHandler next;
 
-    public GraphQLJwtVerifyHandler() {}
+    public JwtVerifyHandler() {}
 
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
@@ -76,39 +83,10 @@ public class GraphQLJwtVerifyHandler implements MiddlewareHandler {
                 headerMap.add(new HttpString(Constants.CLIENT_ID), claims.getStringClaimValue(Constants.CLIENT_ID));
                 headerMap.add(new HttpString(Constants.USER_ID), claims.getStringClaimValue(Constants.USER_ID));
                 headerMap.add(new HttpString(Constants.SCOPE), claims.getStringListClaimValue(Constants.SCOPE).toString());
-                if(config != null && (Boolean)config.get(ENABLE_VERIFY_SCOPE) && SwaggerHelper.swagger != null) {
-                    Operation operation;
-                    SwaggerOperation swaggerOperation = exchange.getAttachment(SwaggerHandler.SWAGGER_OPERATION);
-                    if(swaggerOperation == null) {
-                        final NormalisedPath requestPath = new ApiNormalisedPath(exchange.getRequestURI());
-                        final Optional<NormalisedPath> maybeApiPath = SwaggerHelper.findMatchingApiPath(requestPath);
-                        if (!maybeApiPath.isPresent()) {
-                            Status status = new Status(STATUS_INVALID_REQUEST_PATH);
-                            exchange.setStatusCode(status.getStatusCode());
-                            exchange.getResponseSender().send(status.toString());
-                            return;
-                        }
+                if(config != null && (Boolean)config.get(ENABLE_VERIFY_SCOPE)) {
+                    // need a way to figure out this is query or mutation, is it possible to have multiple queries
+                    // and mutations? If yes, then each one will have a scope with operation_name.r or operation_name.w
 
-                        final NormalisedPath swaggerPathString = maybeApiPath.get();
-                        final Path swaggerPath = SwaggerHelper.swagger.getPath(swaggerPathString.original());
-
-                        final HttpMethod httpMethod = HttpMethod.valueOf(exchange.getRequestMethod().toString());
-                        operation = swaggerPath.getOperationMap().get(httpMethod);
-
-                        if (operation == null) {
-                            Status status = new Status(STATUS_METHOD_NOT_ALLOWED);
-                            exchange.setStatusCode(status.getStatusCode());
-                            exchange.getResponseSender().send(status.toString());
-                            return;
-                        }
-                        swaggerOperation = new SwaggerOperation(swaggerPathString, swaggerPath, httpMethod, operation);
-                        swaggerOperation.setEndpoint(swaggerPathString.normalised() + "@" + httpMethod);
-                        swaggerOperation.setClientId(claims.getStringClaimValue(Constants.CLIENT_ID));
-                        exchange.putAttachment(SwaggerHandler.SWAGGER_OPERATION, swaggerOperation);
-                    } else {
-                        operation = swaggerOperation.getOperation();
-                        swaggerOperation.setClientId(claims.getStringClaimValue(Constants.CLIENT_ID));
-                    }
 
                     // is there a scope token
                     String scopeHeader = headerMap.getFirst(Constants.SCOPE_TOKEN);
@@ -133,15 +111,8 @@ public class GraphQLJwtVerifyHandler implements MiddlewareHandler {
                         }
                     }
 
-                    // get scope defined in swagger spec for this endpoint.
+                    // find out which operation is accessed and what is the scope based one the convention.
                     List<String> specScopes = null;
-                    List<Map<String, List<String>>> security = operation.getSecurity();
-                    if(security != null) {
-                        for(Map<String, List<String>> requirement: security) {
-                            specScopes = requirement.get(SwaggerHelper.oauth2Name);
-                            if(specScopes != null) break;
-                        }
-                    }
 
                     // validate scope
                     if (scopeHeader != null) {
@@ -235,7 +206,7 @@ public class GraphQLJwtVerifyHandler implements MiddlewareHandler {
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(GraphQLJwtVerifyHandler.class.getName(), config, null);
+        ModuleRegistry.registerModule(JwtVerifyHandler.class.getName(), config, null);
     }
 
 }
