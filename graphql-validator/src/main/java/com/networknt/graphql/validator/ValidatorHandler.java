@@ -18,6 +18,7 @@ package com.networknt.graphql.validator;
 
 import com.google.common.net.HttpHeaders;
 import com.networknt.config.Config;
+import com.networknt.graphql.router.GraphqlConfig;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.status.Status;
 import com.networknt.utility.ModuleRegistry;
@@ -42,15 +43,17 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ValidatorHandler implements MiddlewareHandler {
-    public static final String CONFIG_NAME = "validator";
-    public static final String GRAPHQL_URI = "/graphql";
+    public static final String VALIDATOR_CONFIG_NAME = "validator";
+    public static final String GRAPHQL_CONFIG_NAME = "graphql";
 
     static final String STATUS_GRAPHQL_INVALID_PATH = "ERR11500";
     static final String STATUS_GRAPHQL_INVALID_METHOD = "ERR11501";
 
     static final Logger logger = LoggerFactory.getLogger(ValidatorHandler.class);
 
-    static ValidatorConfig config = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(CONFIG_NAME, ValidatorConfig.class);
+    static ValidatorConfig validatorConfig = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(VALIDATOR_CONFIG_NAME, ValidatorConfig.class);
+    static GraphqlConfig graphqlConfig = (GraphqlConfig)Config.getInstance().getJsonObjectConfig(GRAPHQL_CONFIG_NAME, GraphqlConfig.class);
+
 
     private volatile HttpHandler next;
 
@@ -59,9 +62,9 @@ public class ValidatorHandler implements MiddlewareHandler {
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
         String path = exchange.getRequestPath();
-        if(!GRAPHQL_URI.equals(path)) {
+        if(!path.equals(graphqlConfig.getPath())) {
             // invalid GraphQL path
-            Status status = new Status(STATUS_GRAPHQL_INVALID_PATH, path);
+            Status status = new Status(STATUS_GRAPHQL_INVALID_PATH, path, graphqlConfig.getPath());
             exchange.setStatusCode(status.getStatusCode());
             exchange.getResponseSender().send(status.toString());
             return;
@@ -101,12 +104,12 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     @Override
     public boolean isEnabled() {
-        return config.isEnabled();
+        return validatorConfig.isEnabled();
     }
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(ValidatorHandler.class.getName(), Config.getInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+        ModuleRegistry.registerModule(ValidatorHandler.class.getName(), Config.getInstance().getJsonMapConfigNoCache(VALIDATOR_CONFIG_NAME), null);
     }
 
 }
