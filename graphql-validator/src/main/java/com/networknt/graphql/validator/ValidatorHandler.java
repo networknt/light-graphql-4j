@@ -16,6 +16,7 @@
 
 package com.networknt.graphql.validator;
 
+import com.google.common.net.HttpHeaders;
 import com.networknt.config.Config;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.status.Status;
@@ -23,6 +24,7 @@ import com.networknt.utility.ModuleRegistry;
 import io.undertow.Handlers;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.Methods;
 import org.slf4j.Logger;
@@ -77,6 +79,7 @@ public class ValidatorHandler implements MiddlewareHandler {
             // invalid GraphQL method
             Status status = new Status(STATUS_GRAPHQL_INVALID_METHOD, method);
             exchange.setStatusCode(status.getStatusCode());
+            exchange.getResponseHeaders().put(Headers.ALLOW, "GET, POST");
             exchange.getResponseSender().send(status.toString());
             return;
         }

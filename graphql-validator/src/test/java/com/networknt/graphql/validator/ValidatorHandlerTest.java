@@ -129,8 +129,8 @@ public class ValidatorHandlerTest {
             CloseableHttpResponse response = client.execute(httpDelete);
             int statusCode = response.getStatusLine().getStatusCode();
             String body = IOUtils.toString(response.getEntity().getContent(), "utf8");
-            Assert.assertEquals(400, statusCode);
-            if(statusCode == 400) {
+            Assert.assertEquals(405, statusCode);
+            if(statusCode == 405) {
                 Status status = Config.getInstance().getMapper().readValue(body, Status.class);
                 Assert.assertEquals("ERR11501", status.getCode());
             }
