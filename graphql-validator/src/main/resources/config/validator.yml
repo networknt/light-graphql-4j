@@ -1,0 +1,4 @@
+# Validate request/response for GraphQL request
+---
+enabled: true
+enableResponseValidator: false

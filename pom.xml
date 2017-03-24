@@ -96,7 +96,9 @@
     </properties>
 
     <modules>
+        <module>graphql-validator</module>
         <module>graphql-security</module>
+        <module>graphql-router</module>
     </modules>
 
     <dependencyManagement>
