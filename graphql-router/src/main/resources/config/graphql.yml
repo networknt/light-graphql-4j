@@ -1,0 +1,9 @@
+# GraphQL router configuration
+# The router is a HandlerProvider and it needs to be put into file
+# /src/main/resources/META-INF/services/com.networknt.server.HandlerProvider
+---
+# The path of GraphQL endpoint for both GET and POST
+path: /graphql
+
+# Enable GraphiQL for development environment only. It will allow you to test from your Browser.
+enableGraphiQL: true
