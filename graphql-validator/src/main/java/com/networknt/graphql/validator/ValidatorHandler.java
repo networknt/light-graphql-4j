@@ -16,6 +16,7 @@
 
 package com.networknt.graphql.validator;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.net.HttpHeaders;
 import com.networknt.config.Config;
 import com.networknt.graphql.router.GraphqlConfig;
@@ -23,13 +24,19 @@ import com.networknt.handler.MiddlewareHandler;
 import com.networknt.status.Status;
 import com.networknt.utility.ModuleRegistry;
 import io.undertow.Handlers;
+import io.undertow.io.Receiver;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+import io.undertow.util.AttachmentKey;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.Methods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * This is a validator middleware handler for GraphQL. It validate the following:
@@ -48,6 +55,7 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     static final String STATUS_GRAPHQL_INVALID_PATH = "ERR11500";
     static final String STATUS_GRAPHQL_INVALID_METHOD = "ERR11501";
+    public static final AttachmentKey<Object> GRAPHQL_PARAMS = AttachmentKey.create(Object.class);
 
     static final Logger logger = LoggerFactory.getLogger(ValidatorHandler.class);
 
@@ -72,12 +80,32 @@ public class ValidatorHandler implements MiddlewareHandler {
         // verify the method is get or post.
         HttpString method = exchange.getRequestMethod();
         if(Methods.GET.equals(method)) {
-            // validate query parameter
-            //final Collection<String> queryParameterValues = exchange.getQueryParameters().get(queryParameter.getName());
-
+            // validate query parameter exists
+            Map<String, Deque<String>> queryParameters = exchange.getQueryParameters();
+            final Map<String, Object> requestParameters = new HashMap<>();
+            queryParameters.forEach((k, v) -> requestParameters.put(k, v.getFirst()));
+            exchange.putAttachment(GRAPHQL_PARAMS, requestParameters);
+            next.handleRequest(exchange);
         } else if(Methods.POST.equals(method)) {
-            // validate json body
-
+            // validate json body exists
+            String contentType = exchange.getRequestHeaders().getFirst(Headers.CONTENT_TYPE);
+            if (contentType != null && contentType.startsWith("application/json")) {
+                exchange.getRequestReceiver().receiveFullString(new Receiver.FullStringCallback() {
+                    @Override
+                    public void handle(HttpServerExchange exchange, String s) {
+                        try {
+                            logger.debug("s = " + s);
+                            Map<String, Object> requestParameters = Config.getInstance().getMapper().readValue(s,
+                                    new TypeReference<HashMap<String, Object>>() {});
+                            logger.debug("requestParameters = " + requestParameters);
+                            exchange.putAttachment(GRAPHQL_PARAMS, requestParameters);
+                            next.handleRequest(exchange);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
         } else {
             // invalid GraphQL method
             Status status = new Status(STATUS_GRAPHQL_INVALID_METHOD, method);
@@ -87,7 +115,6 @@ public class ValidatorHandler implements MiddlewareHandler {
             return;
         }
 
-        next.handleRequest(exchange);
     }
 
     @Override

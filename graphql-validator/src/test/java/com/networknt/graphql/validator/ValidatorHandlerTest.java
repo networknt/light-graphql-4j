@@ -121,7 +121,7 @@ public class ValidatorHandlerTest {
     }
 
     @Test
-    public void testInvalidPostMethod() throws Exception {
+    public void testInvalidMethod() throws Exception {
         String url = "http://localhost:8080/graphql";
         CloseableHttpClient client = HttpClients.createDefault();
         HttpDelete httpDelete = new HttpDelete(url);
@@ -133,6 +133,29 @@ public class ValidatorHandlerTest {
             if(statusCode == 405) {
                 Status status = Config.getInstance().getMapper().readValue(body, Status.class);
                 Assert.assertEquals("ERR11501", status.getCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void testvalidPostPath() throws Exception {
+        String url = "http://localhost:8080/graphql";
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader(Headers.CONTENT_TYPE.toString(), "application/json");
+        StringEntity entity = new StringEntity("{\"query\":\"{ hello }\",\"variables\":null,\"operationName\":null}");
+        httpPost.setEntity(entity);
+        try {
+            CloseableHttpResponse response = client.execute(httpPost);
+            int statusCode = response.getStatusLine().getStatusCode();
+            String body = IOUtils.toString(response.getEntity().getContent(), "utf8");
+            Assert.assertEquals(200, statusCode);
+            if(statusCode == 200) {
+                //Status status = Config.getInstance().getMapper().readValue(body, Status.class);
+                //Assert.assertEquals("ERR11500", status.getCode());
             }
         } catch (Exception e) {
             e.printStackTrace();
