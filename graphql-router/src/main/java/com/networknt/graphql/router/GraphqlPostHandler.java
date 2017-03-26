@@ -2,6 +2,8 @@ package com.networknt.graphql.router;
 
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.status.Status;
+import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import io.undertow.server.HttpHandler;
@@ -19,6 +21,8 @@ import java.util.ServiceLoader;
  * Created by steve on 24/03/17.
  */
 public class GraphqlPostHandler implements HttpHandler {
+    static final String STATUS_GRAPHQL_MISSING_QUERY = "ERR11502";
+
     static final Logger logger = LoggerFactory.getLogger(GraphqlPostHandler.class);
     static GraphQLSchema schema = null;
     static {
@@ -41,15 +45,23 @@ public class GraphqlPostHandler implements HttpHandler {
         Map<String, Object> requestParameters = (Map<String, Object>)exchange.getAttachment(GraphqlUtil.GRAPHQL_PARAMS);
         if(logger.isDebugEnabled()) logger.debug("requestParameters: " + requestParameters);
         GraphQL graphQL = new GraphQL(schema);
-        Map<String, Object> data = new HashMap<>();
         String query = (String)requestParameters.get("query");
         if(query == null) {
-            // Error Code
-
+            Status status = new Status(STATUS_GRAPHQL_MISSING_QUERY);
+            exchange.setStatusCode(status.getStatusCode());
+            exchange.getResponseSender().send(status.toString());
+            return;
         }
         Map<String, Object> variables = (Map<String, Object>)requestParameters.get("variables");
         String operationName = (String)requestParameters.get("operationName");
-        data.put("data", graphQL.execute(query, operationName, exchange, variables).getData());
-        exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(data));
+        ExecutionResult executionResult = graphQL.execute(query, operationName, exchange, variables);
+        Map<String, Object> result = new HashMap<>();
+        if (executionResult.getErrors().size() > 0) {
+            result.put("errors", executionResult.getErrors());
+            logger.error("Errors: {}", executionResult.getErrors());
+        } else {
+            result.put("data", executionResult.getData());
+        }
+        exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(result));
     }
 }
