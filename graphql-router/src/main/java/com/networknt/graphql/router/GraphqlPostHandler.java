@@ -6,9 +6,11 @@ import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+import io.undertow.util.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
 
@@ -38,9 +40,9 @@ public class GraphqlPostHandler implements HttpHandler {
         // get the request parameters as a Map<String, Object>
         Map<String, Object> requestParameters = (Map<String, Object>)exchange.getAttachment(GraphqlUtil.GRAPHQL_PARAMS);
         if(logger.isDebugEnabled()) logger.debug("requestParameters: " + requestParameters);
-
         GraphQL graphQL = new GraphQL(schema);
-        Object result = graphQL.execute((String)requestParameters.get("query")).getData();
-        exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(result));
+        Map<String, Object> data = new HashMap<>();
+        data.put("data", graphQL.execute((String)requestParameters.get("query")).getData());
+        exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(data));
     }
 }
