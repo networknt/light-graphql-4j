@@ -42,7 +42,14 @@ public class GraphqlPostHandler implements HttpHandler {
         if(logger.isDebugEnabled()) logger.debug("requestParameters: " + requestParameters);
         GraphQL graphQL = new GraphQL(schema);
         Map<String, Object> data = new HashMap<>();
-        data.put("data", graphQL.execute((String)requestParameters.get("query")).getData());
+        String query = (String)requestParameters.get("query");
+        if(query == null) {
+            // Error Code
+
+        }
+        Map<String, Object> variables = (Map<String, Object>)requestParameters.get("variables");
+        String operationName = (String)requestParameters.get("operationName");
+        data.put("data", graphQL.execute(query, operationName, exchange, variables).getData());
         exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(data));
     }
 }
