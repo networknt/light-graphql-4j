@@ -17,9 +17,9 @@
 package com.networknt.graphql.validator;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.net.HttpHeaders;
 import com.networknt.config.Config;
-import com.networknt.graphql.router.GraphqlConfig;
+import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.graphql.common.GraphqlConfig;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.status.Status;
 import com.networknt.utility.ModuleRegistry;
@@ -50,17 +50,14 @@ import java.util.*;
  *
  */
 public class ValidatorHandler implements MiddlewareHandler {
-    public static final String VALIDATOR_CONFIG_NAME = "validator";
-    public static final String GRAPHQL_CONFIG_NAME = "graphql";
+    public static final String CONFIG_NAME = "validator";
 
     static final String STATUS_GRAPHQL_INVALID_PATH = "ERR11500";
     static final String STATUS_GRAPHQL_INVALID_METHOD = "ERR11501";
-    public static final AttachmentKey<Object> GRAPHQL_PARAMS = AttachmentKey.create(Object.class);
 
     static final Logger logger = LoggerFactory.getLogger(ValidatorHandler.class);
 
-    static ValidatorConfig validatorConfig = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(VALIDATOR_CONFIG_NAME, ValidatorConfig.class);
-    static GraphqlConfig graphqlConfig = (GraphqlConfig)Config.getInstance().getJsonObjectConfig(GRAPHQL_CONFIG_NAME, GraphqlConfig.class);
+    static ValidatorConfig config = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(CONFIG_NAME, ValidatorConfig.class);
 
 
     private volatile HttpHandler next;
@@ -70,9 +67,9 @@ public class ValidatorHandler implements MiddlewareHandler {
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
         String path = exchange.getRequestPath();
-        if(!path.equals(graphqlConfig.getPath())) {
+        if(!path.equals(GraphqlUtil.config.getPath())) {
             // invalid GraphQL path
-            Status status = new Status(STATUS_GRAPHQL_INVALID_PATH, path, graphqlConfig.getPath());
+            Status status = new Status(STATUS_GRAPHQL_INVALID_PATH, path, GraphqlUtil.config.getPath());
             exchange.setStatusCode(status.getStatusCode());
             exchange.getResponseSender().send(status.toString());
             return;
@@ -84,7 +81,7 @@ public class ValidatorHandler implements MiddlewareHandler {
             Map<String, Deque<String>> queryParameters = exchange.getQueryParameters();
             final Map<String, Object> requestParameters = new HashMap<>();
             queryParameters.forEach((k, v) -> requestParameters.put(k, v.getFirst()));
-            exchange.putAttachment(GRAPHQL_PARAMS, requestParameters);
+            exchange.putAttachment(GraphqlUtil.GRAPHQL_PARAMS, requestParameters);
             next.handleRequest(exchange);
         } else if(Methods.POST.equals(method)) {
             // validate json body exists
@@ -98,7 +95,7 @@ public class ValidatorHandler implements MiddlewareHandler {
                             Map<String, Object> requestParameters = Config.getInstance().getMapper().readValue(s,
                                     new TypeReference<HashMap<String, Object>>() {});
                             logger.debug("requestParameters = " + requestParameters);
-                            exchange.putAttachment(GRAPHQL_PARAMS, requestParameters);
+                            exchange.putAttachment(GraphqlUtil.GRAPHQL_PARAMS, requestParameters);
                             next.handleRequest(exchange);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -131,12 +128,12 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     @Override
     public boolean isEnabled() {
-        return validatorConfig.isEnabled();
+        return config.isEnabled();
     }
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(ValidatorHandler.class.getName(), Config.getInstance().getJsonMapConfigNoCache(VALIDATOR_CONFIG_NAME), null);
+        ModuleRegistry.registerModule(ValidatorHandler.class.getName(), Config.getInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
     }
 
 }

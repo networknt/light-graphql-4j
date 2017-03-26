@@ -96,6 +96,7 @@
     </properties>
 
     <modules>
+        <module>graphql-common</module>
         <module>graphql-validator</module>
         <module>graphql-security</module>
         <module>graphql-router</module>
@@ -104,6 +105,11 @@
     <dependencyManagement>
         <dependencies>
             <!-- Modules in this project -->
+            <dependency>
+                <groupId>com.networknt</groupId>
+                <artifactId>graphql-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.networknt</groupId>
                 <artifactId>graphql-security</artifactId>

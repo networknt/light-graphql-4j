@@ -1,4 +1,4 @@
-package com.networknt.graphql.router;
+package com.networknt.graphql.common;
 
 /**
  * Created by steve on 24/03/17.

@@ -25,15 +25,11 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>graphql-validator</artifactId>
+    <artifactId>graphql-common</artifactId>
     <packaging>jar</packaging>
-    <description>A validator handler for GraphQL endpoints</description>
+    <description>A shared utility module for GraphQL</description>
 
     <dependencies>
-        <dependency>
-            <groupId>com.networknt</groupId>
-            <artifactId>graphql-common</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.networknt</groupId>
             <artifactId>config</artifactId>
