@@ -92,7 +92,7 @@
         <version.zookeeper>3.5.1-alpha</version.zookeeper>
         <version.zkclient>0.3</version.zkclient>
         <version.curator>3.2.1</version.curator>
-        <argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
+        <version.graphql>2.3.0</version.graphql>
     </properties>
 
     <modules>
@@ -352,6 +352,11 @@
                 <groupId>com.101tec</groupId>
                 <artifactId>zkclient</artifactId>
                 <version>${version.zkclient}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.graphql-java</groupId>
+                <artifactId>graphql-java</artifactId>
+                <version>${version.graphql}</version>
             </dependency>
 
             <!-- Test dependencies -->
