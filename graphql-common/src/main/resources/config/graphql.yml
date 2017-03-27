@@ -1,6 +1,4 @@
-# GraphQL router configuration
-# The router is a HandlerProvider and it needs to be put into file
-# /src/main/resources/META-INF/services/com.networknt.server.HandlerProvider
+# GraphQL configuration
 ---
 # The path of GraphQL endpoint for both GET and POST
 path: /graphql
