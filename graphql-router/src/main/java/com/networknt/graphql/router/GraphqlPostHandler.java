@@ -53,6 +53,9 @@ public class GraphqlPostHandler implements HttpHandler {
             return;
         }
         Map<String, Object> variables = (Map<String, Object>)requestParameters.get("variables");
+        if(variables == null) {
+            variables = new HashMap<>();
+        }
         String operationName = (String)requestParameters.get("operationName");
         ExecutionResult executionResult = graphQL.execute(query, operationName, exchange, variables);
         Map<String, Object> result = new HashMap<>();
