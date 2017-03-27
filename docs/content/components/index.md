@@ -5,13 +5,13 @@ title: Light Java GraphQL Components
 
 ## Common Components
 
-* [graphql-common]() 
+* [graphql-common](https://networknt.github.io/light-java-graphql/components/graphql-common/) 
 
-* [graphql-router]()
+* [graphql-router](https://networknt.github.io/light-java-graphql/components/graphql-router/)
 
 ## Middleware Handlers
 
-* [graphql-security]()
+* [graphql-security](https://networknt.github.io/light-java-graphql/components/graphql-security/)
 
-* [graphql-validator]()
+* [graphql-validator](https://networknt.github.io/light-java-graphql/components/graphql-validator/)
 
