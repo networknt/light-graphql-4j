@@ -1,5 +1,10 @@
-# light-java-graphql
 GraphQL implementation based on light-java
+
+[Developer Chat](https://gitter.im/networknt/light-java-graphql) |
+[Documentation](https://networknt.github.io/light-java-graphql) |
+[Contribution Guide](CONTRIBUTING.md) |
+
+[![Build Status](https://travis-ci.org/networknt/light-java-graphql.svg?branch=master)](https://travis-ci.org/networknt/light-java-graphql)
 
 ## Components
 
