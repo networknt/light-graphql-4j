@@ -24,37 +24,11 @@ graphql query parameter and body.
 
 ## Examples
 
-### Hello
+### [Hello](https://github.com/networknt/light-java-example/tree/master/graphql/hello)
 
-To start the server:
+### [Mutation](https://github.com/networknt/light-java-example/tree/master/graphql/mutation)
 
-```
-git clone git@github.com:networknt/light-java-example.git
-cd light-java-example/graphql/hello
-mvn clean install exec:exec
-```
+### [RelayTodo](https://github.com/networknt/light-java-example/tree/master/graphql/relaytodo)
 
-To test the server: 
 
-```
-curl -H 'Content-Type:application/json' -XPOST http://localhost:8080/graphql -d '{"query":"{ hello }"}'
-```
-
-and the result is:
-
-```
-{"hello":"world"}
-```
-
-To access GraphiQL, you need to put the following url into your browser's address.
-
-```
-http://localhost:8080/graphql
-```
-
-On the left panel, enter the following to test the result.
- 
-```
-{ hello }
-```
 
