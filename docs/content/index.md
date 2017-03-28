@@ -13,7 +13,7 @@ is based on Light Java and is our solution for [GraphQL](http://graphql.org/) se
 With Light Java GraphQL, developers can only focus on Schema development and the rest
 of the functionalities are provided by the framework. These includes:
  
-### Common Components:
+### Common Components
 
 * [server](https://networknt.github.io/light-java/other/server/) is
 a framework on top of Undertow http core that support plugins to perform 
