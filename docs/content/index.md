@@ -134,4 +134,4 @@ verifies JWT token in request header and verifies scopes if it is enabled.
 
 * [graphql-validator](https://networknt.github.io/light-java-graphql/components/graphql-validator/)
 validates the path and methods of the request. Other schema validation will be handled by the
-GraphQL componnent. 
+GraphQL component. 
