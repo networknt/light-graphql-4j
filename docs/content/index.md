@@ -3,8 +3,6 @@ date: 2017-03-26T21:03:44-04:00
 title: Light Java GraphQL
 ---
 
-## Introduction
-
 [Light Java](https://github.com/networknt/light-java) is a framework built on top 
 of Undertow core HTTP server that addresses all the cross-cutting concerns for
 microservices in the request and response chain. [Light Java REST](https://github.com/networknt/light-java-rest)
