@@ -137,4 +137,4 @@ public class MutationSchema implements SchemaProvider {
 
 ### Start server and test
 
-See [README.md](https://github.com/networknt/light-java-example/tree/master/graphql/mutation)
+See [README.md](https://github.com/networknt/light-example-4j/tree/master/graphql/mutation)

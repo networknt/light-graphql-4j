@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+## 1.3.0 - 2017-05-05
+### Added
+
+### Changed
+- Fixes #13 change project name to light-graphql-4j from light-java-graphql
+- Upgrade to light-4j 1.3.0
+
 ## 1.2.8 - 2017-05-02
 ### Added
 

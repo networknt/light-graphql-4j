@@ -5,7 +5,7 @@ title: Roadmap
 
 The current framework is working and there are several examples can be found at
 
-https://github.com/networknt/light-java-example/tree/master/graphql
+https://github.com/networknt/light-example-4j/tree/master/graphql
 
 There are several things in mind to improved it.
 

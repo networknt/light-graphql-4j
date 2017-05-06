@@ -19,14 +19,14 @@ com.networknt.schema.TodoSchema
 
 There are several files to support Todo schema and they are located at 
 
-https://github.com/networknt/light-java-example/tree/master/graphql/relaytodo/src/main/java/com/networknt/schema
+https://github.com/networknt/light-example-4j/tree/master/graphql/relaytodo/src/main/java/com/networknt/schema
 
 ### Relay React App
 
 The client app is located at 
 
-https://github.com/networknt/light-java-example/tree/master/graphql/relaytodo/app
+https://github.com/networknt/light-example-4j/tree/master/graphql/relaytodo/app
 
 ### Start servers and test
 
-See [README.md](https://github.com/networknt/light-java-example/tree/master/graphql/relaytodo)
+See [README.md](https://github.com/networknt/light-example-4j/tree/master/graphql/relaytodo)

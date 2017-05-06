@@ -1,10 +1,10 @@
-GraphQL implementation based on light-java
+GraphQL framework based on light-4j
 
-[Developer Chat](https://gitter.im/networknt/light-java-graphql) |
-[Documentation](https://networknt.github.io/light-java-graphql/introduction/) |
+[Developer Chat](https://gitter.im/networknt/light-graphql-4j) |
+[Documentation](https://networknt.github.io/light-graphql-4j/introduction/) |
 [Contribution Guide](CONTRIBUTING.md) |
 
-[![Build Status](https://travis-ci.org/networknt/light-java-graphql.svg?branch=master)](https://travis-ci.org/networknt/light-java-graphql)
+[![Build Status](https://travis-ci.org/networknt/light-graphql-4j.svg?branch=master)](https://travis-ci.org/networknt/light-graphql-4j)
 
 ## Components
 
@@ -29,11 +29,9 @@ graphql query parameter and body.
 
 ## Examples
 
-### [Hello](https://github.com/networknt/light-java-example/tree/master/graphql/hello)
+### [Hello](https://github.com/networknt/light-example-4j/tree/master/graphql/hello)
 
-### [Mutation](https://github.com/networknt/light-java-example/tree/master/graphql/mutation)
+### [Mutation](https://github.com/networknt/light-example-4j/tree/master/graphql/mutation)
 
-### [RelayTodo](https://github.com/networknt/light-java-example/tree/master/graphql/relaytodo)
-
-
+### [RelayTodo](https://github.com/networknt/light-example-4j/tree/master/graphql/relaytodo)
 

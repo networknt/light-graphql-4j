@@ -7,4 +7,4 @@ To get started, an easy way is to copy one of the examples and replace the schem
 
 If you compare between the examples, the only difference is schema classes. 
 
-Here is the [link](https://github.com/networknt/light-java-example/tree/master/graphql) to examples.
+Here is the [link](https://github.com/networknt/light-example-4j/tree/master/graphql) to examples.
