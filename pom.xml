@@ -91,7 +91,7 @@
         <version.zookeeper>3.5.2-alpha</version.zookeeper>
         <version.zkclient>0.3</version.zkclient>
         <version.curator>3.2.1</version.curator>
-        <version.graphql>2.3.0</version.graphql>
+        <version.graphql>3.0.0</version.graphql>
     </properties>
 
     <modules>
