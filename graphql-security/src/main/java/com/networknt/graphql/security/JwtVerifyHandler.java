@@ -16,13 +16,16 @@
 
 package com.networknt.graphql.security;
 
+import com.networknt.audit.AuditHandler;
 import com.networknt.config.Config;
+import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.security.JwtHelper;
 import com.networknt.status.Status;
 import com.networknt.utility.Constants;
 import com.networknt.exception.ExpiredTokenException;
 import com.networknt.utility.ModuleRegistry;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import io.undertow.Handlers;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -35,6 +38,7 @@ import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,8 +66,6 @@ public class JwtVerifyHandler implements MiddlewareHandler {
     static final String STATUS_SCOPE_TOKEN_EXPIRED = "ERR10004";
     static final String STATUS_AUTH_TOKEN_SCOPE_MISMATCH = "ERR10005";
     static final String STATUS_SCOPE_TOKEN_SCOPE_MISMATCH = "ERR10006";
-    static final String STATUS_INVALID_REQUEST_PATH = "ERR10007";
-    static final String STATUS_METHOD_NOT_ALLOWED = "ERR10008";
 
     static final Map<String, Object> config = Config.getInstance().getJsonMapConfig(JwtHelper.SECURITY_CONFIG);
 
@@ -79,10 +81,11 @@ public class JwtVerifyHandler implements MiddlewareHandler {
         if(jwt != null) {
             try {
                 JwtClaims claims = JwtHelper.verifyJwt(jwt);
-                // put claims into request header so that scope can be verified per endpoint.
-                headerMap.add(new HttpString(Constants.CLIENT_ID), claims.getStringClaimValue(Constants.CLIENT_ID));
-                headerMap.add(new HttpString(Constants.USER_ID), claims.getStringClaimValue(Constants.USER_ID));
-                headerMap.add(new HttpString(Constants.SCOPE), claims.getStringListClaimValue(Constants.SCOPE).toString());
+                Map<String, Object> auditInfo = new HashMap<>();
+                auditInfo.put(Constants.ENDPOINT, GraphqlUtil.config.getPath());
+                auditInfo.put(Constants.CLIENT_ID, claims.getStringClaimValue(Constants.CLIENT_ID));
+                auditInfo.put(Constants.USER_ID, claims.getStringClaimValue(Constants.USER_ID));
+                exchange.putAttachment(AuditHandler.AUDIT_INFO, auditInfo);
                 if(config != null && (Boolean)config.get(ENABLE_VERIFY_SCOPE)) {
                     // need a way to figure out this is query or mutation, is it possible to have multiple queries
                     // and mutations? If yes, then each one will have a scope with operation_name.r or operation_name.w
@@ -96,7 +99,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
                         try {
                             JwtClaims scopeClaims = JwtHelper.verifyJwt(scopeJwt);
                             secondaryScopes = scopeClaims.getStringListClaimValue("scope");
-                            headerMap.add(new HttpString(Constants.SCOPE_CLIENT_ID), scopeClaims.getStringClaimValue(Constants.CLIENT_ID));
+                            auditInfo.put(Constants.SCOPE_CLIENT_ID, scopeClaims.getStringClaimValue(Constants.CLIENT_ID));
                         } catch (InvalidJwtException | MalformedClaimException e) {
                             logger.error("InvalidJwtException", e);
                             Status status = new Status(STATUS_INVALID_SCOPE_TOKEN);
