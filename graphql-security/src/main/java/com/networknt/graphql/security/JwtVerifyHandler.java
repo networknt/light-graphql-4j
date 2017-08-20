@@ -18,20 +18,18 @@ package com.networknt.graphql.security;
 
 import com.networknt.audit.AuditHandler;
 import com.networknt.config.Config;
+import com.networknt.exception.ExpiredTokenException;
 import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.security.JwtHelper;
 import com.networknt.status.Status;
 import com.networknt.utility.Constants;
-import com.networknt.exception.ExpiredTokenException;
 import com.networknt.utility.ModuleRegistry;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import io.undertow.Handlers;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.HeaderMap;
 import io.undertow.util.Headers;
-import io.undertow.util.HttpString;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -82,9 +80,9 @@ public class JwtVerifyHandler implements MiddlewareHandler {
             try {
                 JwtClaims claims = JwtHelper.verifyJwt(jwt);
                 Map<String, Object> auditInfo = new HashMap<>();
-                auditInfo.put(Constants.ENDPOINT, GraphqlUtil.config.getPath());
-                auditInfo.put(Constants.CLIENT_ID, claims.getStringClaimValue(Constants.CLIENT_ID));
-                auditInfo.put(Constants.USER_ID, claims.getStringClaimValue(Constants.USER_ID));
+                auditInfo.put(Constants.ENDPOINT_STRING, GraphqlUtil.config.getPath());
+                auditInfo.put(Constants.CLIENT_ID_STRING, claims.getStringClaimValue(Constants.CLIENT_ID_STRING));
+                auditInfo.put(Constants.USER_ID_STRING, claims.getStringClaimValue(Constants.USER_ID_STRING));
                 exchange.putAttachment(AuditHandler.AUDIT_INFO, auditInfo);
                 if(config != null && (Boolean)config.get(ENABLE_VERIFY_SCOPE)) {
                     // need a way to figure out this is query or mutation, is it possible to have multiple queries
@@ -99,7 +97,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
                         try {
                             JwtClaims scopeClaims = JwtHelper.verifyJwt(scopeJwt);
                             secondaryScopes = scopeClaims.getStringListClaimValue("scope");
-                            auditInfo.put(Constants.SCOPE_CLIENT_ID, scopeClaims.getStringClaimValue(Constants.CLIENT_ID));
+                            auditInfo.put(Constants.SCOPE_CLIENT_ID_STRING, scopeClaims.getStringClaimValue(Constants.CLIENT_ID_STRING));
                         } catch (InvalidJwtException | MalformedClaimException e) {
                             logger.error("InvalidJwtException", e);
                             Status status = new Status(STATUS_INVALID_SCOPE_TOKEN);
