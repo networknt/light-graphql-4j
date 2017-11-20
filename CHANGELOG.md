@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+## 1.5.2 - 2017-11-19
+### Added
+
+### Changed
+- Upgrade to light-4j 1.5.2
+
 ## 1.5.1 - 2017-11-08
 ### Added
 
