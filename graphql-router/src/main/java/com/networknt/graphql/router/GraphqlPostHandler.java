@@ -2,19 +2,18 @@ package com.networknt.graphql.router;
 
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.service.SingletonServiceFactory;
 import com.networknt.status.Status;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
-import io.undertow.util.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ServiceLoader;
 
 
 /**
@@ -26,16 +25,14 @@ public class GraphqlPostHandler implements HttpHandler {
     static final Logger logger = LoggerFactory.getLogger(GraphqlPostHandler.class);
     static GraphQLSchema schema = null;
     static {
-        // load GraphQL Schema with service loader. It should be defined in SchemaProvider
-        final ServiceLoader<SchemaProvider> schemaLoaders = ServiceLoader.load(SchemaProvider.class);
-        for (final SchemaProvider provider : schemaLoaders) {
-            if (provider.getSchema() != null) {
-                schema = provider.getSchema();
-                break;
-            }
+        // load GraphQL Schema with service loader. It should be defined in service.yml
+        SchemaProvider schemaProvider = SingletonServiceFactory.getBean(SchemaProvider.class);
+        if(schemaProvider != null) {
+            schema = schemaProvider.getSchema();
         }
         if (schema == null) {
-            logger.error("Unable to load GraphQL schema - no SchemaProvider implementation available in the classpath");
+            logger.error("Unable to load GraphQL schema - no SchemaProvider implementation in service.yml");
+            throw new RuntimeException("Unable to load GraphQL schema - no SchemaProvider implementation in service.yml");
         }
     }
 
