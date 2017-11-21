@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+## 1.5.4 - 2017-11-19
+### Added
+
+### Changed
+- fixes #21 Load schema provider from service module instead of Java service provider
+- Upgrade to light-4j 1.5.4
+
 ## 1.5.3 - 2017-11-19
 ### Added
 
