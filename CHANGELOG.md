@@ -1,141 +1,118 @@
 # Change Log
-All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+## [1.5.6](https://github.com/networknt/light-graphql-4j/tree/1.5.6) (2017-12-30)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.4...1.5.6)
 
-## [Unreleased]
-### Added
+**Closed issues:**
 
-### Changed
+- Update default security.yml in graphql-security [\#23](https://github.com/networknt/light-graphql-4j/issues/23)
+- Maven build warnings [\#22](https://github.com/networknt/light-graphql-4j/issues/22)
 
-## 1.5.5 - 2017-12-10
-### Added
+## [1.5.4](https://github.com/networknt/light-graphql-4j/tree/1.5.4) (2017-11-21)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.3...1.5.4)
 
-### Changed
-- fixes #23 Update default security.yml in graphql-security 
-- Upgrade to light-4j 1.5.5
+**Closed issues:**
 
-## 1.5.4 - 2017-11-19
-### Added
+- Load schema provider from service module instead of Java service provider [\#21](https://github.com/networknt/light-graphql-4j/issues/21)
 
-### Changed
-- fixes #21 Load schema provider from service module instead of Java service provider
-- Upgrade to light-4j 1.5.4
+## [1.5.3](https://github.com/networknt/light-graphql-4j/tree/1.5.3) (2017-11-20)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.2...1.5.3)
 
-## 1.5.3 - 2017-11-19
-### Added
+## [1.5.2](https://github.com/networknt/light-graphql-4j/tree/1.5.2) (2017-11-20)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.1...1.5.2)
 
-### Changed
-- Upgrade to light-4j 1.5.3
+## [1.5.1](https://github.com/networknt/light-graphql-4j/tree/1.5.1) (2017-11-09)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.0...1.5.1)
 
-## 1.5.2 - 2017-11-19
-### Added
+## [1.5.0](https://github.com/networknt/light-graphql-4j/tree/1.5.0) (2017-10-21)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.4.6...1.5.0)
 
-### Changed
-- Upgrade to light-4j 1.5.2
+**Closed issues:**
 
-## 1.5.1 - 2017-11-08
-### Added
+- Upgrade dependencies and add maven-version [\#20](https://github.com/networknt/light-graphql-4j/issues/20)
 
-### Changed
-- Upgrade to light-4j 1.5.1
+## [1.4.6](https://github.com/networknt/light-graphql-4j/tree/1.4.6) (2017-09-24)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.4.4...1.4.6)
 
-## 1.5.0 - 2017-10-21
-### Added
+## [1.4.4](https://github.com/networknt/light-graphql-4j/tree/1.4.4) (2017-09-21)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.4.3...1.4.4)
 
-### Changed
-- fixes #20 Upgrade dependencies and add maven-version
-- Upgrade to light-4j 1.5.0
+## [1.4.3](https://github.com/networknt/light-graphql-4j/tree/1.4.3) (2017-09-10)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.4.2...1.4.3)
 
-## 1.4.6 - 2017-09-24
-### Added
+## [1.4.2](https://github.com/networknt/light-graphql-4j/tree/1.4.2) (2017-08-31)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.4.1...1.4.2)
 
-### Changed
-- Upgrade to light-4j 1.4.6
+## [1.4.1](https://github.com/networknt/light-graphql-4j/tree/1.4.1) (2017-08-30)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.4.0...1.4.1)
 
-## 1.4.4 - 2017-09-20
-### Added
+**Closed issues:**
 
-### Changed
-- Upgrade to light-4j 1.4.4
+- Upgrade Undertow and Jackson to the newer version [\#19](https://github.com/networknt/light-graphql-4j/issues/19)
 
-## 1.4.3 - 2017-09-10
-### Added
+## [1.4.0](https://github.com/networknt/light-graphql-4j/tree/1.4.0) (2017-08-22)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.3.5...1.4.0)
 
-### Changed
-- Upgrade to light-4j 1.4.3
+**Closed issues:**
 
-## 1.4.2 - 2017-08-31
-### Added
+- Replace Client with Http2Client in test cases and remove dependency of apache httpclient [\#18](https://github.com/networknt/light-graphql-4j/issues/18)
+- Upgrade to Undertow 1.4.18.Final and remove JsonPath from pom.xml [\#17](https://github.com/networknt/light-graphql-4j/issues/17)
 
-### Changed
-- Upgrade to light-4j 1.4.2
+## [1.3.5](https://github.com/networknt/light-graphql-4j/tree/1.3.5) (2017-08-01)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.3.4...1.3.5)
 
-## 1.4.1 - 2017-08-30
-### Added
+## [1.3.4](https://github.com/networknt/light-graphql-4j/tree/1.3.4) (2017-07-08)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.3.3...1.3.4)
 
-### Changed
-- fixes #19 Upgrade Undertow and Jackson to the newer version
-- Upgrade to light-4j 1.4.1
+## [1.3.3](https://github.com/networknt/light-graphql-4j/tree/1.3.3) (2017-06-14)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.3.2...1.3.3)
 
-## 1.4.0 - 2017-08-22
-### Added
+## [1.3.2](https://github.com/networknt/light-graphql-4j/tree/1.3.2) (2017-06-14)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.3.1...1.3.2)
 
-### Changed
-- fixes #18 replace Client with Http2Client
-- fixes #17 Upgrade to Undertow 1.4.18.Final and remove JsonPath
-- Upgrade to light-4j 1.4.0
+**Closed issues:**
 
-## 1.3.5 - 2017-08-01
-### Added
+- Update security handler to populate AuditInfo exchange attachment for Audit and Metrics [\#16](https://github.com/networknt/light-graphql-4j/issues/16)
+- graphql-security should populate auditInfo in order to make metrics work. [\#15](https://github.com/networknt/light-graphql-4j/issues/15)
 
-### Changed
-- Upgrade to light-4j 1.3.5
+## [1.3.1](https://github.com/networknt/light-graphql-4j/tree/1.3.1) (2017-06-03)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.3.0...1.3.1)
 
-## 1.3.4 - 2017-07-08
-### Added
+**Closed issues:**
 
-### Changed
-- Upgrade to light-4j 1.3.4
+- Upgrade to graphql-java 3.0.0 with IDL support in ligh-codegen [\#14](https://github.com/networknt/light-graphql-4j/issues/14)
 
-## 1.3.3 - 2017-06-14
-### Added
+## [1.3.0](https://github.com/networknt/light-graphql-4j/tree/1.3.0) (2017-05-06)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.2.8...1.3.0)
 
-### Changed
-- Upgrade to light-4j 1.3.3
+**Closed issues:**
 
-## 1.3.2 - 2017-06-14
-### Added
+- Change the project name to light-graphql-4j as java is Oracle trademark [\#13](https://github.com/networknt/light-graphql-4j/issues/13)
 
-### Changed
-- Fixes #16 update security handler to populate auditInfo for metrics
-- Upgrade to light-4j 1.3.2
+## [1.2.8](https://github.com/networknt/light-graphql-4j/tree/1.2.8) (2017-05-02)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.2.7...1.2.8)
 
-## 1.3.1 - 2017-06-03
-### Added
+**Closed issues:**
 
-### Changed
-- Fixes #14 upgrade graphql-java to 3.0.0 with IDL support
-- Upgrade to light-4j 1.3.1
+- upgrade dependencies to the latest version [\#12](https://github.com/networknt/light-graphql-4j/issues/12)
 
-## 1.3.0 - 2017-05-05
-### Added
+## [1.2.7](https://github.com/networknt/light-graphql-4j/tree/1.2.7) (2017-03-28)
+**Fixed bugs:**
 
-### Changed
-- Fixes #13 change project name to light-graphql-4j from light-java-graphql
-- Upgrade to light-4j 1.3.0
+- Get AssertionError if arguments map is null [\#10](https://github.com/networknt/light-graphql-4j/issues/10)
 
-## 1.2.8 - 2017-05-02
-### Added
+**Closed issues:**
 
-### Changed
-- Fixes #12 upgrade dependencies
-- Upgrade to light-java 1.2.8
+- Handle query parameter is missing [\#9](https://github.com/networknt/light-graphql-4j/issues/9)
+- Support variables, operationName and pass exchange as context [\#8](https://github.com/networknt/light-graphql-4j/issues/8)
+- GraphiQL IntrospectionQuery is not rendered correctly [\#7](https://github.com/networknt/light-graphql-4j/issues/7)
+- Implement GraphiQL in get handler [\#6](https://github.com/networknt/light-graphql-4j/issues/6)
+- Add SchemaProvider interface so that the handlers can load schema with SPI. [\#5](https://github.com/networknt/light-graphql-4j/issues/5)
+- Implement graphql-common to share the configuration and static utility with simple dependencies [\#4](https://github.com/networknt/light-graphql-4j/issues/4)
+- Implement GraphQL validator [\#3](https://github.com/networknt/light-graphql-4j/issues/3)
+- Implement graphql-router [\#2](https://github.com/networknt/light-graphql-4j/issues/2)
+- Implement JWT token verification for GraphQL endpoint [\#1](https://github.com/networknt/light-graphql-4j/issues/1)
 
-## 1.2.7 - 2017-03-28
-### Added
 
-### Changed
-- Upgrade with light-java 1.2.7
 
+\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
