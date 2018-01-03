@@ -1,7 +1,7 @@
 GraphQL framework based on light-4j
 
 [Developer Chat](https://gitter.im/networknt/light-graphql-4j) |
-[Documentation](https://networknt.github.io/light-graphql-4j/introduction/) |
+[Documentation](https://doc.networknt.com/style/light-graphql-4j/) |
 [Contribution Guide](CONTRIBUTING.md) |
 
 [![Build Status](https://travis-ci.org/networknt/light-graphql-4j.svg?branch=master)](https://travis-ci.org/networknt/light-graphql-4j)

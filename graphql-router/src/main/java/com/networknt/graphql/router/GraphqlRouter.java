@@ -1,6 +1,5 @@
 package com.networknt.graphql.router;
 
-import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.info.ServerInfoGetHandler;
 import com.networknt.server.HandlerProvider;
@@ -9,7 +8,9 @@ import io.undertow.server.HttpHandler;
 import io.undertow.util.Methods;
 
 /**
- * Created by stevehu on 2017-03-22.
+ * Router of the graphql request to map different handlers.
+ *
+ * @author Steve Hu
  */
 public class GraphqlRouter implements HandlerProvider {
 

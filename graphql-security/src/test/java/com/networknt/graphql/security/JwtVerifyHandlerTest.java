@@ -45,7 +45,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Created by steve on 01/09/16.
+ * Test case for security handler of light-graphql-4j
+ *
+ * @author Steve Hu
  */
 public class JwtVerifyHandlerTest {
     static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandlerTest.class);

@@ -4,7 +4,10 @@ import com.networknt.config.Config;
 import io.undertow.util.AttachmentKey;
 
 /**
- * Created by steve on 25/03/17.
+ * A utility class that contains some static variables and static methods shared
+ * by all other modules.
+ *
+ * @author Steve Hu
  */
 public class GraphqlUtil {
     public static final String CONFIG_NAME = "graphql";

@@ -49,23 +49,23 @@ import java.util.Map;
  * concerns at middleware level within the framework, we don't want to inject anything extra into
  * the schema for authorization.
  *
- * Created by steve on 01/09/16.
+ * @author Steve Hu
  *
  */
 public class JwtVerifyHandler implements MiddlewareHandler {
-    static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandler.class);
 
-    static final String ENABLE_VERIFY_SCOPE = "enableVerifyScope";
+    private static final String ENABLE_VERIFY_SCOPE = "enableVerifyScope";
 
-    static final String STATUS_INVALID_AUTH_TOKEN = "ERR10000";
-    static final String STATUS_AUTH_TOKEN_EXPIRED = "ERR10001";
-    static final String STATUS_MISSING_AUTH_TOKEN = "ERR10002";
-    static final String STATUS_INVALID_SCOPE_TOKEN = "ERR10003";
-    static final String STATUS_SCOPE_TOKEN_EXPIRED = "ERR10004";
-    static final String STATUS_AUTH_TOKEN_SCOPE_MISMATCH = "ERR10005";
-    static final String STATUS_SCOPE_TOKEN_SCOPE_MISMATCH = "ERR10006";
+    private static final String STATUS_INVALID_AUTH_TOKEN = "ERR10000";
+    private static final String STATUS_AUTH_TOKEN_EXPIRED = "ERR10001";
+    private static final String STATUS_MISSING_AUTH_TOKEN = "ERR10002";
+    private static final String STATUS_INVALID_SCOPE_TOKEN = "ERR10003";
+    private static final String STATUS_SCOPE_TOKEN_EXPIRED = "ERR10004";
+    private static final String STATUS_AUTH_TOKEN_SCOPE_MISMATCH = "ERR10005";
+    private static final String STATUS_SCOPE_TOKEN_SCOPE_MISMATCH = "ERR10006";
 
-    static final Map<String, Object> config = Config.getInstance().getJsonMapConfig(JwtHelper.SECURITY_CONFIG);
+    private static final Map<String, Object> config = Config.getInstance().getJsonMapConfig(JwtHelper.SECURITY_CONFIG);
 
     private volatile HttpHandler next;
 
@@ -112,7 +112,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
                         }
                     }
 
-                    // find out which operation is accessed and what is the scope based one the convention.
+                    // TODO find out which operation is accessed and what is the scope based one the convention.
                     List<String> specScopes = null;
 
                     // validate scope

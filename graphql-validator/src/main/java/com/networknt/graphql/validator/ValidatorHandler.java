@@ -19,7 +19,6 @@ package com.networknt.graphql.validator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
-import com.networknt.graphql.common.GraphqlConfig;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.status.Status;
 import com.networknt.utility.ModuleRegistry;
@@ -27,16 +26,15 @@ import io.undertow.Handlers;
 import io.undertow.io.Receiver;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
-import io.undertow.util.AttachmentKey;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
 import io.undertow.util.Methods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This is a validator middleware handler for GraphQL. It validate the following:
@@ -46,7 +44,7 @@ import java.util.*;
  * 3. The query parameter is a valid GraphQL query
  * 4. The body is a valid GraphQL json body
  *
- * Created by steve on 01/09/16.
+ * @author Steve Hu
  *
  */
 public class ValidatorHandler implements MiddlewareHandler {

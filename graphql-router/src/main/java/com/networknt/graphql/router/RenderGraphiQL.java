@@ -1,19 +1,20 @@
 package com.networknt.graphql.router;
 
-import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.utility.Util;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by steve on 26/03/17.
+ * GraphiQL implementation
+ *
+ * @author Steve Hu
  */
 public class RenderGraphiQL {
     // Current latest version of GraphiQL
-    public static final String GRAPHIQL_VERSION = "0.9.1";
+    private static final String GRAPHIQL_VERSION = "0.9.1";
 
-    public static final String template = "<!--\n" +
+    private static final String template = "<!--\n" +
             "The request to this GraphQL server provided the header \"Accept: text/html\"\n" +
             "and as a result has been presented GraphiQL - an in-browser IDE for\n" +
             "exploring GraphQL.\n" +

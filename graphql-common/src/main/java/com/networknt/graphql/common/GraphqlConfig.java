@@ -1,11 +1,14 @@
 package com.networknt.graphql.common;
 
 /**
- * Created by steve on 24/03/17.
+ * Main configuration class for graphql framework that defines the path for
+ * graphql endpoint and if GraphiQL is enabled or not.
+ *
+ * @author Steve Hu
  */
 public class GraphqlConfig {
-    String path;
-    boolean enableGraphiQL;
+    private String path;
+    private boolean enableGraphiQL;
 
     public GraphqlConfig() {
     }

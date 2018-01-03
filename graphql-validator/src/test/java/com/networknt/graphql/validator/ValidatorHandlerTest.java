@@ -45,12 +45,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
- * Created by steve on 01/09/16.
+ * Test cases for ValidatorHandler
+ *
+ * @author Steve Hu
  */
 public class ValidatorHandlerTest {
-    static final Logger logger = LoggerFactory.getLogger(ValidatorHandlerTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ValidatorHandlerTest.class);
 
-    static Undertow server = null;
+    private static Undertow server = null;
 
     @BeforeClass
     public static void setUp() {
@@ -68,7 +70,7 @@ public class ValidatorHandlerTest {
     }
 
     @AfterClass
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         if(server != null) {
             try {
                 Thread.sleep(100);
@@ -80,7 +82,7 @@ public class ValidatorHandlerTest {
         }
     }
 
-    static RoutingHandler getTestHandler() {
+    private static RoutingHandler getTestHandler() {
         return Handlers.routing()
                 .add(Methods.GET, "/graphql", exchange -> exchange.getResponseSender().send("get"))
                 .add(Methods.POST, "/graphql", exchange -> exchange.getResponseSender().send("post"));
@@ -130,15 +132,12 @@ public class ValidatorHandlerTest {
 
         try {
             String post = "Hello";
-            connection.getIoThread().execute(new Runnable() {
-                @Override
-                public void run() {
-                    final ClientRequest request = new ClientRequest().setMethod(Methods.POST).setPath("/v2/pet");
-                    request.getRequestHeaders().put(Headers.HOST, "localhost");
-                    request.getRequestHeaders().put(Headers.CONTENT_TYPE, "application/json");
-                    request.getRequestHeaders().put(Headers.TRANSFER_ENCODING, "chunked");
-                    connection.sendRequest(request, client.createClientCallback(reference, latch, post));
-                }
+            connection.getIoThread().execute(() -> {
+                final ClientRequest request = new ClientRequest().setMethod(Methods.POST).setPath("/v2/pet");
+                request.getRequestHeaders().put(Headers.HOST, "localhost");
+                request.getRequestHeaders().put(Headers.CONTENT_TYPE, "application/json");
+                request.getRequestHeaders().put(Headers.TRANSFER_ENCODING, "chunked");
+                connection.sendRequest(request, client.createClientCallback(reference, latch, post));
             });
 
             latch.await(10, TimeUnit.SECONDS);
@@ -202,15 +201,12 @@ public class ValidatorHandlerTest {
 
         try {
             String post = "{\"query\":\"{ hello }\",\"variables\":null,\"operationName\":null}";
-            connection.getIoThread().execute(new Runnable() {
-                @Override
-                public void run() {
-                    final ClientRequest request = new ClientRequest().setMethod(Methods.POST).setPath("/graphql");
-                    request.getRequestHeaders().put(Headers.HOST, "localhost");
-                    request.getRequestHeaders().put(Headers.CONTENT_TYPE, "application/json");
-                    request.getRequestHeaders().put(Headers.TRANSFER_ENCODING, "chunked");
-                    connection.sendRequest(request, client.createClientCallback(reference, latch, post));
-                }
+            connection.getIoThread().execute(() -> {
+                final ClientRequest request = new ClientRequest().setMethod(Methods.POST).setPath("/graphql");
+                request.getRequestHeaders().put(Headers.HOST, "localhost");
+                request.getRequestHeaders().put(Headers.CONTENT_TYPE, "application/json");
+                request.getRequestHeaders().put(Headers.TRANSFER_ENCODING, "chunked");
+                connection.sendRequest(request, client.createClientCallback(reference, latch, post));
             });
 
             latch.await(10, TimeUnit.SECONDS);

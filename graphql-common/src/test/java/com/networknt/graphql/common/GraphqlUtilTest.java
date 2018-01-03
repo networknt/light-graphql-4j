@@ -3,7 +3,9 @@ package com.networknt.graphql.common;
 import org.junit.Test;
 
 /**
- * Created by steve on 25/03/17.
+ * A unit test class for GraphqlUtil
+ *
+ * @author Steve Hu
  */
 public class GraphqlUtilTest {
     @Test

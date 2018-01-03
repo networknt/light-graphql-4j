@@ -3,7 +3,11 @@ package com.networknt.graphql.router;
 import graphql.schema.GraphQLSchema;
 
 /**
- * Created by steve on 25/03/17.
+ * SchemaProvider interface that is used to inject schema implementation to the
+ * framework. The service module is responsible to inject implementation for each
+ * application.
+ *
+ * @author Steve Hu
  */
 public interface SchemaProvider {
     GraphQLSchema getSchema();

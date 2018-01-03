@@ -1,11 +1,12 @@
 package com.networknt.graphql.validator;
 
 /**
- * Created by steve on 24/03/17.
+ * GraphQL validator configuration class
+ *
+ * @author Steve Hu
  */
 public class ValidatorConfig {
-    boolean enabled;
-    boolean enableResponseValidator;
+    private boolean enabled;
 
     public ValidatorConfig() {
     }
@@ -18,11 +19,4 @@ public class ValidatorConfig {
         this.enabled = enabled;
     }
 
-    public boolean isEnableResponseValidator() {
-        return enableResponseValidator;
-    }
-
-    public void setEnableResponseValidator(boolean enableResponseValidator) {
-        this.enableResponseValidator = enableResponseValidator;
-    }
 }
