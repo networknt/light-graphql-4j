@@ -27,11 +27,27 @@ Basic request validation for the graphql path and methods. It is the first line 
 validation right after graphql-security and it doesn't have any knowledge about the
 graphql query parameter and body.
 
-## Examples
+## Tutorial
 
-### [Hello](https://github.com/networknt/light-example-4j/tree/master/graphql/hello)
+### [Hello World](https://doc.networknt.com/tutorial/graphql/helloworld/)
 
-### [Mutation](https://github.com/networknt/light-example-4j/tree/master/graphql/mutation)
+This is a very simple Hello World query to show you how to get GraphQL up and running with
+light-codegen without using GraphQL IDL.
 
-### [RelayTodo](https://github.com/networknt/light-example-4j/tree/master/graphql/relaytodo)
+### [Star Wars](https://doc.networknt.com/tutorial/graphql/starwars/)
+
+This is a similar example as Hello World with IDL to trigger the generation. It is utilize the
+star wars GraphQL IDL downloaded from the Internet.
+ 
+### [Mutation](https://doc.networknt.com/tutorial/graphql/mutation/)
+
+This example shows you how to create a full blown GraphQL service with both query and mutation.
+
+### [Mutation IDL](https://doc.networknt.com/tutorial/graphql/mutation-idl/)
+
+This is the same example like the mutation but is generated from a schema. 
+
+### [Relay Todo](https://doc.networknt.com/tutorial/graphql/relay-todo/)
+
+This is to show you how to build a GraphQL service that is working with Relayjs. 
 
