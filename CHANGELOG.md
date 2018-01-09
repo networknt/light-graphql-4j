@@ -1,6 +1,16 @@
 # Change Log
 
-## [1.5.6](https://github.com/networknt/light-graphql-4j/tree/1.5.6) (2017-12-30)
+## [1.5.7](https://github.com/networknt/light-graphql-4j/tree/1.5.7) (2018-01-09)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.6...1.5.7)
+
+**Closed issues:**
+
+- GraphqlPostHandler doesn't return content-type=application/json [\#28](https://github.com/networknt/light-graphql-4j/issues/28)
+- update README.md to link to document site [\#26](https://github.com/networknt/light-graphql-4j/issues/26)
+- clean up dependencies for all modules [\#25](https://github.com/networknt/light-graphql-4j/issues/25)
+- upgrade to graphql-java 6.0 with subscription [\#24](https://github.com/networknt/light-graphql-4j/issues/24)
+
+## [1.5.6](https://github.com/networknt/light-graphql-4j/tree/1.5.6) (2017-12-28)
 [Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.4...1.5.6)
 
 **Closed issues:**
