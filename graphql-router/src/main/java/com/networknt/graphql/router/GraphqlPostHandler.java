@@ -26,7 +26,7 @@ public class GraphqlPostHandler implements HttpHandler {
     private static final String STATUS_GRAPHQL_MISSING_QUERY = "ERR11502";
 
     private static final Logger logger = LoggerFactory.getLogger(GraphqlPostHandler.class);
-    private static GraphQLSchema schema = null;
+    static GraphQLSchema schema = null;
 
     static {
         // load GraphQL Schema with service loader. It should be defined in service.yml

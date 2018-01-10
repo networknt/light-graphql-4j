@@ -65,7 +65,7 @@ public class ValidatorHandler implements MiddlewareHandler {
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
         String path = exchange.getRequestPath();
-        if(!path.equals(GraphqlUtil.config.getPath())) {
+        if(!path.equals(GraphqlUtil.config.getPath()) && !path.equals(GraphqlUtil.config.getSubscriptionsPath())) {
             // invalid GraphQL path
             Status status = new Status(STATUS_GRAPHQL_INVALID_PATH, path, GraphqlUtil.config.getPath());
             exchange.setStatusCode(status.getStatusCode());
@@ -85,19 +85,16 @@ public class ValidatorHandler implements MiddlewareHandler {
             // validate json body exists
             String contentType = exchange.getRequestHeaders().getFirst(Headers.CONTENT_TYPE);
             if (contentType != null && contentType.startsWith("application/json")) {
-                exchange.getRequestReceiver().receiveFullString(new Receiver.FullStringCallback() {
-                    @Override
-                    public void handle(HttpServerExchange exchange, String s) {
-                        try {
-                            logger.debug("s = " + s);
-                            Map<String, Object> requestParameters = Config.getInstance().getMapper().readValue(s,
-                                    new TypeReference<HashMap<String, Object>>() {});
-                            logger.debug("requestParameters = " + requestParameters);
-                            exchange.putAttachment(GraphqlUtil.GRAPHQL_PARAMS, requestParameters);
-                            next.handleRequest(exchange);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                exchange.getRequestReceiver().receiveFullString((exchange1, s) -> {
+                    try {
+                        logger.debug("s = " + s);
+                        Map<String, Object> requestParameters = Config.getInstance().getMapper().readValue(s,
+                                new TypeReference<HashMap<String, Object>>() {});
+                        logger.debug("requestParameters = " + requestParameters);
+                        exchange1.putAttachment(GraphqlUtil.GRAPHQL_PARAMS, requestParameters);
+                        next.handleRequest(exchange1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 });
             }

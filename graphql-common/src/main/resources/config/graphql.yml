@@ -5,3 +5,6 @@ path: /graphql
 
 # Enable GraphiQL for development environment only. It will allow you to test from your Browser.
 enableGraphiQL: true
+
+# Path to the websocket endpoint to handle subscription requests.
+subscriptionsPath: /subscriptions
