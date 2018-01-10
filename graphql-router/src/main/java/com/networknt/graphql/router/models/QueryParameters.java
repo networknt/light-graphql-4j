@@ -5,6 +5,7 @@ import java.util.Map;
 
 import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants.GRAPHQL_REQUEST_QUERY_KEY;
 import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants.GRAPHQL_REQUEST_VARIABLES_KEY;
+import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants.GRAPHQL_RESPONSE_PAYLOAD_KEY;
 
 /**
  * Graphql clients can send GET or POST HTTP requests.  The spec does not make an explicit
@@ -34,8 +35,9 @@ public class QueryParameters {
 
     public static QueryParameters from(Map inputData) {
         QueryParameters parameters = new QueryParameters();
-        parameters.query = (String)inputData.get(GRAPHQL_REQUEST_QUERY_KEY);
-        parameters.variables = (Map)inputData.get(GRAPHQL_REQUEST_VARIABLES_KEY);
+        Map<String, Object> payload = (Map)inputData.get(GRAPHQL_RESPONSE_PAYLOAD_KEY);
+        parameters.query = (String)payload.get(GRAPHQL_REQUEST_QUERY_KEY);
+        parameters.variables = (Map)payload.get(GRAPHQL_REQUEST_VARIABLES_KEY);
         return parameters;
     }
 }

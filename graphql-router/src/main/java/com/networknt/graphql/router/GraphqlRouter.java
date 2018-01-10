@@ -1,6 +1,8 @@
 package com.networknt.graphql.router;
 
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.graphql.router.handlers.GraphqlPathHandler;
+import com.networknt.graphql.router.handlers.GraphqlSubscriptionHandler;
 import com.networknt.server.HandlerProvider;
 import io.undertow.server.HttpHandler;
 import io.undertow.websockets.WebSocketConnectionCallback;

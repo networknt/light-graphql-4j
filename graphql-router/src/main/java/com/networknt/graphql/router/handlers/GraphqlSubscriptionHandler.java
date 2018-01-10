@@ -1,4 +1,4 @@
-package com.networknt.graphql.router;
+package com.networknt.graphql.router.handlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.networknt.config.Config;
@@ -32,6 +32,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.networknt.graphql.common.GraphqlConstants.GraphqlSubscriptionConstants;
 
+/**
+ * Handles and manages websocket connections for use in graphql subscriptions.
+ *
+ * @author Nicholas Azar
+ */
 public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
     private Logger logger = LoggerFactory.getLogger(GraphqlSubscriptionHandler.class);
 
@@ -67,10 +72,10 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
                 String requestType = (String) inputData.get(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY);
                 // We receive an init when graphiql is initially loaded (no subscription query sent). We
                 // respond with init success.
-                if (GraphqlSubscriptionConstants.GRAPHQL_INIT_REQ_TYPE.equals(requestType)) {
+                if (GraphqlSubscriptionConstants.GQL_CONNECTION_INIT.equals(requestType)) {
                     sendInitSuccess(channel);
-                } else if (GraphqlSubscriptionConstants.GRAPHQL_START_REQ_TYPE.equals(requestType)) {
-                    Integer operationId = (Integer) inputData.get(GraphqlSubscriptionConstants.GRAPHQL_OP_ID_KEY);
+                } else if (GraphqlSubscriptionConstants.GQL_START.equals(requestType)) {
+                    String operationId = (String) inputData.get(GraphqlSubscriptionConstants.GRAPHQL_OP_ID_KEY);
                     ExecutionResult executionResult = getExecutionResult(inputData);
                     if (executionResult.getErrors() != null && executionResult.getErrors().size() > 0) {
                         // If we fail to initially get the result, send an error.
@@ -78,8 +83,14 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
                     } else {
                         // We successfully got a subscription, send a subscription success.
                         subscribeToResults(executionResult, channel, operationId);
-                        sendSubscriptionSuccess(channel, operationId);
+//                        sendSubscriptionSuccess(channel, operationId);
                     }
+                } else if (GraphqlSubscriptionConstants.GQL_STOP.equals(requestType)) {
+                    // TODO: Client sends this message in order to stop a running GraphQL operation execution (for example: unsubscribe)
+                    logger.warn("GQL_STOP not yet implemented.");
+                } else {
+                    logger.error("Request type not recognized as supported protocol: " + requestType +
+                            " see https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md");
                 }
             }
         });
@@ -107,7 +118,7 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
     /**
      * Helper method to send data to the client.
      */
-    private void sendDataResponse(WebSocketChannel channel, ExecutionResult executionResult, Integer operationId) {
+    private void sendDataResponse(WebSocketChannel channel, ExecutionResult executionResult, String operationId) {
         Map<String, Object> nextPayload = new HashMap<>();
         if (executionResult.getData() != null) {
             nextPayload.put(GraphqlConstants.GraphqlRouterConstants.GRAPHQL_RESPONSE_DATA_KEY, executionResult.getData());
@@ -118,7 +129,7 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
 
         Map<String, Object> result = new HashMap<>();
         result.put(GraphqlSubscriptionConstants.GRAPHQL_OP_ID_KEY, operationId);
-        result.put(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY, GraphqlSubscriptionConstants.GRAPHQL_DATA_RES_TYPE);
+        result.put(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY, GraphqlSubscriptionConstants.GQL_DATA);
         result.put(GraphqlConstants.GraphqlRouterConstants.GRAPHQL_RESPONSE_PAYLOAD_KEY, nextPayload);
         try {
             WebSockets.sendText(Config.getInstance().getMapper().writeValueAsString(result), channel, null);
@@ -130,7 +141,7 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
     /**
      * Generic subscription manager to propagate data from the action.
      */
-    private void subscribeToResults(ExecutionResult executionResult, WebSocketChannel channel, Integer id) {
+    private void subscribeToResults(ExecutionResult executionResult, WebSocketChannel channel, String operationId) {
         CompletionStageMappingPublisher<ExecutionResult, CompletionStage> mappingPublisher = executionResult.getData();
 
         mappingPublisher.subscribe(new Subscriber<ExecutionResult>() {
@@ -144,7 +155,7 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
 
             @Override
             public void onNext(ExecutionResult nextExecutionResult) {
-                sendDataResponse(channel, nextExecutionResult, id);
+                sendDataResponse(channel, nextExecutionResult, operationId);
                 subscriptionRef.get().request(1);
             }
 
@@ -167,17 +178,7 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
      */
     private void sendInitSuccess(WebSocketChannel channel) throws JsonProcessingException {
         Map<String, Object> outputData = new HashMap<>();
-        outputData.put(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY, GraphqlSubscriptionConstants.GRAPHQL_INIT_SUCCESS_REQ_TYPE);
-        WebSockets.sendText(Config.getInstance().getMapper().writeValueAsString(outputData), channel, null);
-    }
-
-    /**
-     * Helper method to respond with subscription_success.
-     */
-    private void sendSubscriptionSuccess(WebSocketChannel channel, Integer operationId) throws JsonProcessingException {
-        Map<String, Object> outputData = new HashMap<>();
-        outputData.put(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY, GraphqlSubscriptionConstants.GRAPHQL_SUCCESS_REQ_TYPE);
-        outputData.put(GraphqlSubscriptionConstants.GRAPHQL_OP_ID_KEY, operationId);
+        outputData.put(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY, GraphqlSubscriptionConstants.GQL_CONNECTION_ACK);
         WebSockets.sendText(Config.getInstance().getMapper().writeValueAsString(outputData), channel, null);
     }
 }

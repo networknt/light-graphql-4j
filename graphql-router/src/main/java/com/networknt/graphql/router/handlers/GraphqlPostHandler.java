@@ -1,7 +1,8 @@
-package com.networknt.graphql.router;
+package com.networknt.graphql.router.handlers;
 
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.graphql.router.SchemaProvider;
 import com.networknt.service.SingletonServiceFactory;
 import com.networknt.status.Status;
 import graphql.ExecutionInput;
@@ -10,12 +11,17 @@ import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
-import io.undertow.util.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants.GRAPHQL_REQUEST_OP_NAME_KEY;
+import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants.GRAPHQL_REQUEST_QUERY_KEY;
+import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants.GRAPHQL_REQUEST_VARIABLES_KEY;
+import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants.GRAPHQL_RESPONSE_DATA_KEY;
+import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants.GRAPHQL_RESPONSE_ERROR_KEY;
 
 /**
  * GraphQL post request handler
@@ -46,8 +52,9 @@ public class GraphqlPostHandler implements HttpHandler {
         @SuppressWarnings("unchecked")
         Map<String, Object> requestParameters = (Map<String, Object>)exchange.getAttachment(GraphqlUtil.GRAPHQL_PARAMS);
         if(logger.isDebugEnabled()) logger.debug("requestParameters: " + requestParameters);
+
         GraphQL graphQL = GraphQL.newGraphQL(schema).build();
-        String query = (String)requestParameters.get("query");
+        String query = (String)requestParameters.get(GRAPHQL_REQUEST_QUERY_KEY);
         if(query == null) {
             Status status = new Status(STATUS_GRAPHQL_MISSING_QUERY);
             exchange.setStatusCode(status.getStatusCode());
@@ -55,21 +62,20 @@ public class GraphqlPostHandler implements HttpHandler {
             return;
         }
         @SuppressWarnings("unchecked")
-        Map<String, Object> variables = (Map<String, Object>)requestParameters.get("variables");
+        Map<String, Object> variables = (Map<String, Object>)requestParameters.get(GRAPHQL_REQUEST_VARIABLES_KEY);
         if(variables == null) {
             variables = new HashMap<>();
         }
-        String operationName = (String)requestParameters.get("operationName");
+        String operationName = (String)requestParameters.get(GRAPHQL_REQUEST_OP_NAME_KEY);
         ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query).operationName(operationName).context(exchange).root(exchange).variables(variables).build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         Map<String, Object> result = new HashMap<>();
         if (executionResult.getErrors().size() > 0) {
-            result.put("errors", executionResult.getErrors());
+            result.put(GRAPHQL_RESPONSE_ERROR_KEY, executionResult.getErrors());
             logger.error("Errors: {}", executionResult.getErrors());
         } else {
-            result.put("data", executionResult.getData());
+            result.put(GRAPHQL_RESPONSE_DATA_KEY, executionResult.getData());
         }
-        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
         exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(result));
     }
 }

@@ -1,7 +1,9 @@
 package com.networknt.graphql.common;
 
 import com.networknt.config.Config;
+import io.undertow.server.HttpServerExchange;
 import io.undertow.util.AttachmentKey;
+import io.undertow.util.HttpString;
 
 /**
  * A utility class that contains some static variables and static methods shared
@@ -15,5 +17,4 @@ public class GraphqlUtil {
     public static final AttachmentKey<Object> GRAPHQL_PARAMS = AttachmentKey.create(Object.class);
 
     public static GraphqlConfig config = (GraphqlConfig) Config.getInstance().getJsonObjectConfig(CONFIG_NAME, GraphqlConfig.class);
-
 }

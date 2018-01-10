@@ -1,6 +1,7 @@
-package com.networknt.graphql.router;
+package com.networknt.graphql.router.handlers;
 
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.graphql.router.RenderGraphiQL;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
