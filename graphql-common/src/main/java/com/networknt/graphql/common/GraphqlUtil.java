@@ -1,9 +1,7 @@
 package com.networknt.graphql.common;
 
 import com.networknt.config.Config;
-import io.undertow.server.HttpServerExchange;
 import io.undertow.util.AttachmentKey;
-import io.undertow.util.HttpString;
 
 /**
  * A utility class that contains some static variables and static methods shared
