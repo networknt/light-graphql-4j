@@ -1,0 +1,10 @@
+rootProject.name = 'light-graphql-4j'
+include ':graphql-common'
+include ':graphql-validator'
+include ':graphql-security'
+include ':graphql-router'
+
+project(':graphql-common').projectDir = "$rootDir/graphql-common" as File
+project(':graphql-validator').projectDir = "$rootDir/graphql-validator" as File
+project(':graphql-security').projectDir = "$rootDir/graphql-security" as File
+project(':graphql-router').projectDir = "$rootDir/graphql-router" as File
