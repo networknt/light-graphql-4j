@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.5.9](https://github.com/networknt/light-graphql-4j/tree/1.5.9) (2018-02-21)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.8...1.5.9)
+
+**Closed issues:**
+
+- enable travis ci work with master branch only [\#33](https://github.com/networknt/light-graphql-4j/issues/33)
+- return header conent-type with application/json for post handler [\#32](https://github.com/networknt/light-graphql-4j/issues/32)
+
+## [1.5.8](https://github.com/networknt/light-graphql-4j/tree/1.5.8) (2018-01-10)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.7...1.5.8)
+
 ## [1.5.7](https://github.com/networknt/light-graphql-4j/tree/1.5.7) (2018-01-09)
 [Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.6...1.5.7)
 
