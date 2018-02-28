@@ -83,6 +83,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
                 auditInfo.put(Constants.ENDPOINT_STRING, GraphqlUtil.config.getPath());
                 auditInfo.put(Constants.CLIENT_ID_STRING, claims.getStringClaimValue(Constants.CLIENT_ID_STRING));
                 auditInfo.put(Constants.USER_ID_STRING, claims.getStringClaimValue(Constants.USER_ID_STRING));
+                auditInfo.put(Constants.SUBJECT_CLAIMS, claims);
                 exchange.putAttachment(AuditHandler.AUDIT_INFO, auditInfo);
                 if(config != null && (Boolean)config.get(ENABLE_VERIFY_SCOPE)) {
                     // need a way to figure out this is query or mutation, is it possible to have multiple queries
@@ -98,6 +99,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
                             JwtClaims scopeClaims = JwtHelper.verifyJwt(scopeJwt);
                             secondaryScopes = scopeClaims.getStringListClaimValue("scope");
                             auditInfo.put(Constants.SCOPE_CLIENT_ID_STRING, scopeClaims.getStringClaimValue(Constants.CLIENT_ID_STRING));
+                            auditInfo.put(Constants.ACCESS_CLAIMS, scopeClaims);
                         } catch (InvalidJwtException | MalformedClaimException e) {
                             logger.error("InvalidJwtException", e);
                             Status status = new Status(STATUS_INVALID_SCOPE_TOKEN);
