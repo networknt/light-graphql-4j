@@ -12,6 +12,7 @@ import graphql.schema.GraphQLSchema;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
+import io.undertow.util.StatusCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +79,7 @@ public class GraphqlPostHandler implements HttpHandler {
             result.put(GRAPHQL_RESPONSE_DATA_KEY, executionResult.getData());
         }
         exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
+        exchange.setStatusCode(StatusCodes.OK);
         exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(result));
     }
 }

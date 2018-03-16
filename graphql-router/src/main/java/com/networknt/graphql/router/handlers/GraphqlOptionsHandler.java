@@ -13,6 +13,7 @@ import graphql.introspection.IntrospectionQuery;
 import graphql.schema.GraphQLSchema;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+import io.undertow.util.StatusCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +45,8 @@ public class GraphqlOptionsHandler implements HttpHandler {
     /**
      * For introspection queries, we execute the built in query supplied in graphql-java without any parameters.
      *
-     * @param httpServerExchange
-     * @throws JsonProcessingException
+     * @param httpServerExchange exchange
+     * @throws JsonProcessingException json processing exception
      */
     @Override
     public void handleRequest(HttpServerExchange httpServerExchange) throws Exception {
@@ -56,6 +57,7 @@ public class GraphqlOptionsHandler implements HttpHandler {
                 .query(IntrospectionQuery.INTROSPECTION_QUERY).build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
         result.put(GraphqlConstants.GraphqlRouterConstants.GRAPHQL_RESPONSE_DATA_KEY, executionResult.getData());
+        httpServerExchange.setStatusCode(StatusCodes.OK);
         httpServerExchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(result));
     }
 }

@@ -5,6 +5,7 @@ import com.networknt.graphql.router.RenderGraphiQL;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
+import io.undertow.util.StatusCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ public class GraphqlGetHandler implements HttpHandler {
         if(logger.isDebugEnabled()) logger.debug("requestParameters: " + requestParameters);
         String graphiql = RenderGraphiQL.render(requestParameters, null);
         exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/html; charset=UTF-8");
+        exchange.setStatusCode(StatusCodes.OK);
         exchange.getResponseSender().send(graphiql);
     }
 }
