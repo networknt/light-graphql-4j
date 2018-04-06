@@ -76,7 +76,7 @@
         <version.mockito>2.10.0</version.mockito>
         <version.undertow>1.4.20.Final</version.undertow>
         <version.assertj>3.8.0</version.assertj>
-        <version.graphql>6.0</version.graphql>
+        <version.graphql>8.0</version.graphql>
         <versions.maven-version>2.4</versions.maven-version>
         <argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
     </properties>
