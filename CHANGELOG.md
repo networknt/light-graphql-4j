@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.5.12](https://github.com/networknt/light-graphql-4j/tree/1.5.12) (2018-04-08)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.11...1.5.12)
+
+**Implemented enhancements:**
+
+- bump pom graphql-java to 8.0 [\#37](https://github.com/networknt/light-graphql-4j/issues/37)
+
+**Closed issues:**
+
+- remove unused version properties in pom.xml [\#36](https://github.com/networknt/light-graphql-4j/issues/36)
+
 ## [1.5.11](https://github.com/networknt/light-graphql-4j/tree/1.5.11) (2018-03-31)
 [Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.10...1.5.11)
 
