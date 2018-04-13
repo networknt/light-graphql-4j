@@ -2,6 +2,8 @@ package com.networknt.graphql.router.handlers;
 
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.graphql.common.InstrumentationLoader;
+import com.networknt.graphql.common.InstrumentationProvider;
 import com.networknt.graphql.router.SchemaProvider;
 import com.networknt.service.SingletonServiceFactory;
 import com.networknt.status.Status;
@@ -55,7 +57,7 @@ public class GraphqlPostHandler implements HttpHandler {
         Map<String, Object> requestParameters = (Map<String, Object>)exchange.getAttachment(GraphqlUtil.GRAPHQL_PARAMS);
         if(logger.isDebugEnabled()) logger.debug("requestParameters: " + requestParameters);
 
-        GraphQL graphQL = GraphQL.newGraphQL(schema).build();
+        GraphQL graphQL = this.getGraphql();
         String query = (String)requestParameters.get(GRAPHQL_REQUEST_QUERY_KEY);
         if(query == null) {
             Status status = new Status(STATUS_GRAPHQL_MISSING_QUERY);
@@ -81,5 +83,13 @@ public class GraphqlPostHandler implements HttpHandler {
         exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
         exchange.setStatusCode(StatusCodes.OK);
         exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(result));
+    }
+
+    private GraphQL getGraphql() {
+        GraphQL.Builder graphql = GraphQL.newGraphQL(schema);
+        if (InstrumentationLoader.graphqlInstrumentation != null) {
+            graphql = graphql.instrumentation(InstrumentationLoader.graphqlInstrumentation);
+        }
+        return graphql.build();
     }
 }

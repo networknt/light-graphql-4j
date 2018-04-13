@@ -3,6 +3,7 @@ package com.networknt.graphql.router.handlers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlConstants;
+import com.networknt.graphql.common.InstrumentationLoader;
 import com.networknt.graphql.router.models.QueryParameters;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
@@ -108,9 +109,8 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
                 .query(parameters.getQuery())
                 .variables(parameters.getVariables())
                 .build();
-        Instrumentation instrumentation = new ChainedInstrumentation(Collections.singletonList(new TracingInstrumentation()));
         return GraphQL.newGraphQL(GraphqlPostHandler.schema)
-                .instrumentation(instrumentation)
+                .instrumentation(getInstrumentation())
                 .build()
                 .execute(executionInput);
     }
@@ -180,5 +180,16 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
         Map<String, Object> outputData = new HashMap<>();
         outputData.put(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY, GraphqlSubscriptionConstants.GQL_CONNECTION_ACK);
         WebSockets.sendText(Config.getInstance().getMapper().writeValueAsString(outputData), channel, null);
+    }
+
+    /**
+     * Check to see if the client has provided instrumentation and use that if they have.
+     * Otherwise fall back to TracingInstrumentation.
+     */
+    private Instrumentation getInstrumentation() {
+        if (InstrumentationLoader.graphqlSubscriptionInstrumentation == null) {
+            return new ChainedInstrumentation(Collections.singletonList(new TracingInstrumentation()));
+        }
+        return InstrumentationLoader.graphqlSubscriptionInstrumentation;
     }
 }
