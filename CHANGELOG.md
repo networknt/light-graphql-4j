@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.5.13](https://github.com/networknt/light-graphql-4j/tree/1.5.13) (2018-04-20)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.12...1.5.13)
+
+**Merged pull requests:**
+
+- Adding support for injectable instrumentation \#38 [\#39](https://github.com/networknt/light-graphql-4j/pull/39) ([NicholasAzar](https://github.com/NicholasAzar))
+
 ## [1.5.12](https://github.com/networknt/light-graphql-4j/tree/1.5.12) (2018-04-08)
 [Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.11...1.5.12)
 
