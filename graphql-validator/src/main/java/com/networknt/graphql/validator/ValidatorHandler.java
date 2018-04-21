@@ -19,7 +19,9 @@ package com.networknt.graphql.validator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.graphql.common.ResourceLoader;
 import com.networknt.handler.MiddlewareHandler;
+import com.networknt.resources.ResourceHelpers;
 import com.networknt.status.Status;
 import com.networknt.utility.ModuleRegistry;
 import io.undertow.Handlers;
@@ -37,14 +39,13 @@ import java.util.Map;
 
 /**
  * This is a validator middleware handler for GraphQL. It validate the following:
- *
+ * <p>
  * 1. The path is /graphql
  * 2. Method must be get, post, or options (for introspection)
  * 3. The query parameter is a valid GraphQL query
  * 4. The body is a valid GraphQL json body
  *
  * @author Steve Hu
- *
  */
 public class ValidatorHandler implements MiddlewareHandler {
     public static final String CONFIG_NAME = "validator";
@@ -54,7 +55,7 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     static final Logger logger = LoggerFactory.getLogger(ValidatorHandler.class);
 
-    static ValidatorConfig config = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(CONFIG_NAME, ValidatorConfig.class);
+    static ValidatorConfig config = (ValidatorConfig) Config.getInstance().getJsonObjectConfig(CONFIG_NAME, ValidatorConfig.class);
 
 
     private volatile HttpHandler next;
@@ -64,7 +65,8 @@ public class ValidatorHandler implements MiddlewareHandler {
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
         String path = exchange.getRequestPath();
-        if(!path.equals(GraphqlUtil.config.getPath()) && !path.equals(GraphqlUtil.config.getSubscriptionsPath())) {
+        if (!path.equals(GraphqlUtil.config.getPath()) && !path.equals(GraphqlUtil.config.getSubscriptionsPath())
+                && !ResourceHelpers.isResourcePath(path, ResourceLoader.pathResourceProviders)) {
             // invalid GraphQL path
             logger.warn("Invalid graphql path requested: " + path);
             Status status = new Status(STATUS_GRAPHQL_INVALID_PATH, path, GraphqlUtil.config.getPath());
@@ -74,14 +76,14 @@ public class ValidatorHandler implements MiddlewareHandler {
         }
         // verify the method is get or post.
         HttpString method = exchange.getRequestMethod();
-        if(Methods.GET.equals(method)) {
+        if (Methods.GET.equals(method)) {
             // validate query parameter exists
             Map<String, Deque<String>> queryParameters = exchange.getQueryParameters();
             final Map<String, Object> requestParameters = new HashMap<>();
             queryParameters.forEach((k, v) -> requestParameters.put(k, v.getFirst()));
             exchange.putAttachment(GraphqlUtil.GRAPHQL_PARAMS, requestParameters);
             next.handleRequest(exchange);
-        } else if(Methods.POST.equals(method) || Methods.OPTIONS.equals(method)) {
+        } else if (Methods.POST.equals(method) || Methods.OPTIONS.equals(method)) {
             exchange.getRequestReceiver().receiveFullString((exchange1, s) -> {
                 try {
                     logger.debug("s = " + s);

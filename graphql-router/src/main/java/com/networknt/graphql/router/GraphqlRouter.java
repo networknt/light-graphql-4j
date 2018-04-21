@@ -1,10 +1,15 @@
 package com.networknt.graphql.router;
 
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.graphql.common.ResourceLoader;
 import com.networknt.graphql.router.handlers.GraphqlPathHandler;
 import com.networknt.graphql.router.handlers.GraphqlSubscriptionHandler;
+import com.networknt.resources.ResourceHelpers;
 import com.networknt.server.HandlerProvider;
+import io.undertow.Handlers;
 import io.undertow.server.HttpHandler;
+import io.undertow.server.handlers.PathHandler;
+import io.undertow.server.handlers.builder.PredicatedHandler;
 import io.undertow.websockets.WebSocketConnectionCallback;
 import io.undertow.websockets.WebSocketProtocolHandshakeHandler;
 import io.undertow.websockets.core.protocol.Handshake;
@@ -15,6 +20,7 @@ import io.undertow.websockets.extensions.ExtensionHandshake;
 import io.undertow.websockets.extensions.PerMessageDeflateHandshake;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.networknt.graphql.common.GraphqlConstants.GraphqlRouterConstants;
@@ -27,18 +33,28 @@ import static io.undertow.Handlers.path;
  */
 public class GraphqlRouter implements HandlerProvider {
 
-
     @Override
     public HttpHandler getHandler() {
+
         ExtensionHandshake extensionHandshake = new PerMessageDeflateHandshake();
 
         WebSocketConnectionCallback webSocketConnectionCallback = new GraphqlSubscriptionHandler();
         HttpHandler websocketHttpHandler = new WebSocketProtocolHandshakeHandler(buildHandshakeset(),
                 webSocketConnectionCallback).addExtension(extensionHandshake);
 
-        return path()
+        PathHandler pathHandler = path();
+        ResourceHelpers.addProvidersToPathHandler(ResourceLoader.pathResourceProviders, pathHandler);
+
+        pathHandler
                 .addPrefixPath(GraphqlUtil.config.getPath(), new GraphqlPathHandler())
                 .addPrefixPath(GraphqlUtil.config.getSubscriptionsPath(), websocketHttpHandler);
+
+        List<PredicatedHandler> predicatedHandlers = ResourceHelpers.getPredicatedHandlers(ResourceLoader.predicatedHandlersProviders);
+        if (predicatedHandlers.size() > 0) {
+            return Handlers.predicates(predicatedHandlers, pathHandler);
+        }
+
+        return pathHandler;
     }
 
     /**
