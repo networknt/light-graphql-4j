@@ -7,6 +7,7 @@ package com.networknt.graphql.validator;
  */
 public class ValidatorConfig {
     private boolean enabled;
+    private boolean logError;
 
     public ValidatorConfig() {
     }
@@ -19,4 +20,7 @@ public class ValidatorConfig {
         this.enabled = enabled;
     }
 
+    public boolean isLogError() { return logError; }
+
+    public void setLogError(boolean logError) { this.logError = logError; }
 }

@@ -1,3 +1,6 @@
 # Validate request/response for GraphQL request
 ---
+# Enable request validation against the specification
 enabled: true
+# Log error message if validation error occurs
+logError: true
