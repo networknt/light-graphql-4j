@@ -1,5 +1,14 @@
 # Change Log
 
+## [1.5.14](https://github.com/networknt/light-graphql-4j/tree/1.5.14) (2018-05-19)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.13...1.5.14)
+
+**Closed issues:**
+
+- update VerifyJwt signature and security.yml [\#41](https://github.com/networknt/light-graphql-4j/issues/41)
+- Log error message on the server if validation error occurs [\#40](https://github.com/networknt/light-graphql-4j/issues/40)
+- Add Instrumentation to Config and PostHandler [\#38](https://github.com/networknt/light-graphql-4j/issues/38)
+
 ## [1.5.13](https://github.com/networknt/light-graphql-4j/tree/1.5.13) (2018-04-20)
 [Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.12...1.5.13)
 
