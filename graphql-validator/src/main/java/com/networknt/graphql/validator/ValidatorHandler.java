@@ -66,10 +66,7 @@ public class ValidatorHandler implements MiddlewareHandler {
         String path = exchange.getRequestPath();
         if(!path.equals(GraphqlUtil.config.getPath()) && !path.equals(GraphqlUtil.config.getSubscriptionsPath())) {
             // invalid GraphQL path
-            Status status = new Status(STATUS_GRAPHQL_INVALID_PATH, path, GraphqlUtil.config.getPath());
-            if(config.isLogError()) logger.error("ValidationError:" + status);
-            exchange.setStatusCode(status.getStatusCode());
-            exchange.getResponseSender().send(status.toString());
+            setExchangeStatus(exchange, STATUS_GRAPHQL_INVALID_PATH, path, GraphqlUtil.config.getPath());
             return;
         }
         // verify the method is get or post.
@@ -101,13 +98,12 @@ public class ValidatorHandler implements MiddlewareHandler {
         } else {
             // invalid GraphQL method
             Status status = new Status(STATUS_GRAPHQL_INVALID_METHOD, method);
-            if(config.isLogError()) logger.error("ValidationError:" + status.toString());
+            logger.error("ValidationError:" + status.toString());
             exchange.setStatusCode(status.getStatusCode());
             exchange.getResponseHeaders().put(Headers.ALLOW, "GET, POST, OPTIONS");
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
             exchange.getResponseSender().send(status.toString());
-
         }
-
     }
 
     @Override

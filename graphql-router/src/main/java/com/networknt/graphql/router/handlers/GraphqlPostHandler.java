@@ -62,7 +62,9 @@ public class GraphqlPostHandler implements HttpHandler {
         if(query == null) {
             Status status = new Status(STATUS_GRAPHQL_MISSING_QUERY);
             exchange.setStatusCode(status.getStatusCode());
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
             exchange.getResponseSender().send(status.toString());
+            logger.error(status.toString());
             return;
         }
         @SuppressWarnings("unchecked")
