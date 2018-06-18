@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.5.15](https://github.com/networknt/light-graphql-4j/tree/1.5.15) (2018-06-18)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.14...1.5.15)
+
+**Closed issues:**
+
+- switch to default setExchangeStatus method for errors [\#42](https://github.com/networknt/light-graphql-4j/issues/42)
+
 ## [1.5.14](https://github.com/networknt/light-graphql-4j/tree/1.5.14) (2018-05-19)
 [Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.13...1.5.14)
 
