@@ -19,6 +19,7 @@ package com.networknt.graphql.validator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.status.Status;
 import com.networknt.utility.ModuleRegistry;
@@ -89,7 +90,7 @@ public class ValidatorHandler implements MiddlewareHandler {
                         logger.debug("requestParameters = " + requestParameters);
                         exchange1.putAttachment(GraphqlUtil.GRAPHQL_PARAMS, requestParameters);
                     }
-                    next.handleRequest(exchange1);
+                    Handler.next(exchange1, next);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

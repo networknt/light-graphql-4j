@@ -20,6 +20,7 @@ import com.networknt.audit.AuditHandler;
 import com.networknt.config.Config;
 import com.networknt.exception.ExpiredTokenException;
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.security.JwtHelper;
 import com.networknt.status.Status;
@@ -136,7 +137,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
                         }
                     }
                 }
-                next.handleRequest(exchange);
+                Handler.next(exchange, next);
             } catch (InvalidJwtException e) {
                 // only log it and unauthorized is returned.
                 logger.error("InvalidJwtException: ", e);
