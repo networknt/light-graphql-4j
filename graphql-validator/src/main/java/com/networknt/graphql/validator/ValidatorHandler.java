@@ -78,7 +78,7 @@ public class ValidatorHandler implements MiddlewareHandler {
             final Map<String, Object> requestParameters = new HashMap<>();
             queryParameters.forEach((k, v) -> requestParameters.put(k, v.getFirst()));
             exchange.putAttachment(GraphqlUtil.GRAPHQL_PARAMS, requestParameters);
-            next.handleRequest(exchange);
+            Handler.next(exchange, next);
         } else if(Methods.POST.equals(method) || Methods.OPTIONS.equals(method)) {
             exchange.getRequestReceiver().receiveFullString((exchange1, s) -> {
                 try {
