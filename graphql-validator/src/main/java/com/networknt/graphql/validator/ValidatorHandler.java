@@ -48,6 +48,7 @@ import java.util.Map;
  *
  */
 public class ValidatorHandler implements MiddlewareHandler {
+    public static final String GRAPHQL_CONFIG_NAME = "graqhql-validator";
     public static final String CONFIG_NAME = "validator";
 
     static final String STATUS_GRAPHQL_INVALID_PATH = "ERR11500";
@@ -55,8 +56,13 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     static final Logger logger = LoggerFactory.getLogger(ValidatorHandler.class);
 
-    static ValidatorConfig config = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(CONFIG_NAME, ValidatorConfig.class);
-
+    static ValidatorConfig config;
+    static {
+        config = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(GRAPHQL_CONFIG_NAME, ValidatorConfig.class);
+        if(config == null) {
+            config = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(CONFIG_NAME, ValidatorConfig.class);
+        }
+    }
 
     private volatile HttpHandler next;
 
