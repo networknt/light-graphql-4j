@@ -1,0 +1,8 @@
+# This is specific GraphQL validator configuration file. It should be used if you have multiple
+# frameworks implemented in the same server instance and they all need to have different validator
+# configurations. If they share the same validator.yml then you can still use that one.
+---
+# Enable request validation against the specification
+enabled: true
+# Log error message if validation error occurs
+logError: true

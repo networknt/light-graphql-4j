@@ -56,6 +56,7 @@ import java.util.Map;
 public class JwtVerifyHandler implements MiddlewareHandler {
     private static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandler.class);
 
+    private static final String GRAPHQL_SECURITY_CONFIG = "graphql-security";
     private static final String ENABLE_VERIFY_SCOPE = "enableVerifyScope";
 
     private static final String STATUS_INVALID_AUTH_TOKEN = "ERR10000";
@@ -66,7 +67,13 @@ public class JwtVerifyHandler implements MiddlewareHandler {
     private static final String STATUS_AUTH_TOKEN_SCOPE_MISMATCH = "ERR10005";
     private static final String STATUS_SCOPE_TOKEN_SCOPE_MISMATCH = "ERR10006";
 
-    private static final Map<String, Object> config = Config.getInstance().getJsonMapConfig(JwtHelper.SECURITY_CONFIG);
+    static Map<String, Object> config;
+    static {
+        // check if openapi-security.yml exist
+        config = Config.getInstance().getJsonMapConfig(GRAPHQL_SECURITY_CONFIG);
+        // fallback to generic security.yml
+        if(config == null) config = Config.getInstance().getJsonMapConfig(JwtHelper.SECURITY_CONFIG);
+    }
 
     private volatile HttpHandler next;
 
