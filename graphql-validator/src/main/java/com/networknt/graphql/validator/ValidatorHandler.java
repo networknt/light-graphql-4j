@@ -48,7 +48,7 @@ import java.util.Map;
  *
  */
 public class ValidatorHandler implements MiddlewareHandler {
-    public static final String GRAPHQL_CONFIG_NAME = "graqhql-validator";
+    public static final String GRAPHQL_CONFIG_NAME = "graphql-validator";
     public static final String CONFIG_NAME = "validator";
 
     static final String STATUS_GRAPHQL_INVALID_PATH = "ERR11500";
