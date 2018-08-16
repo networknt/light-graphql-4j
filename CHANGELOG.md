@@ -1,5 +1,21 @@
 # Change Log
 
+## [1.5.18](https://github.com/networknt/light-graphql-4j/tree/1.5.18) (2018-08-16)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.17...1.5.18)
+
+**Closed issues:**
+
+- flatten the config files into the same directory for k8s [\#46](https://github.com/networknt/light-graphql-4j/issues/46)
+- support specific GraphQL security and validator configuration [\#44](https://github.com/networknt/light-graphql-4j/issues/44)
+- upgrade to undertow 2.0.11.Final [\#43](https://github.com/networknt/light-graphql-4j/issues/43)
+
+**Merged pull requests:**
+
+- fixes \#44 support specific GraphQL security and validator configuration [\#45](https://github.com/networknt/light-graphql-4j/pull/45) ([stevehu](https://github.com/stevehu))
+
+## [1.5.17](https://github.com/networknt/light-graphql-4j/tree/1.5.17) (2018-07-15)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.16...1.5.17)
+
 ## [1.5.16](https://github.com/networknt/light-graphql-4j/tree/1.5.16) (2018-07-05)
 [Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.15...1.5.16)
 
