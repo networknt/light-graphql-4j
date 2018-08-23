@@ -2,6 +2,7 @@ package com.networknt.graphql.router.handlers;
 
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
+import com.networknt.graphql.router.ExecutionStrategyProvider;
 import com.networknt.graphql.common.InstrumentationLoader;
 import com.networknt.graphql.common.InstrumentationProvider;
 import com.networknt.graphql.router.SchemaProvider;
@@ -10,6 +11,7 @@ import com.networknt.status.Status;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
+import graphql.execution.ExecutionStrategy;
 import graphql.schema.GraphQLSchema;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -37,6 +39,9 @@ public class GraphqlPostHandler implements HttpHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GraphqlPostHandler.class);
     static GraphQLSchema schema = null;
+    static ExecutionStrategy queryExecutionStrategy = null;
+    static ExecutionStrategy mutationExecutionStrategy = null;
+    static ExecutionStrategy subscriptionExecutionStrategy = null;
 
     static {
         // load GraphQL Schema with service loader. It should be defined in service.yml
@@ -47,6 +52,18 @@ public class GraphqlPostHandler implements HttpHandler {
         if (schema == null) {
             logger.error("Unable to load GraphQL schema - no SchemaProvider implementation in service.yml");
             throw new RuntimeException("Unable to load GraphQL schema - no SchemaProvider implementation in service.yml");
+        }
+
+        // Replace default execution strategies if so configured.
+        ExecutionStrategyProvider executionStrategyProvider = SingletonServiceFactory.getBean(ExecutionStrategyProvider.class);
+        if(executionStrategyProvider != null) {
+            queryExecutionStrategy = executionStrategyProvider.getQueryExecutionStrategy();
+        }
+        if(executionStrategyProvider != null) {
+            mutationExecutionStrategy = executionStrategyProvider.getMutationExecutionStrategy();
+        }
+        if(executionStrategyProvider != null) {
+            subscriptionExecutionStrategy = executionStrategyProvider.getSubscriptionExecutionStrategy();
         }
     }
 
@@ -91,6 +108,15 @@ public class GraphqlPostHandler implements HttpHandler {
         GraphQL.Builder graphql = GraphQL.newGraphQL(schema);
         if (InstrumentationLoader.graphqlInstrumentation != null) {
             graphql = graphql.instrumentation(InstrumentationLoader.graphqlInstrumentation);
+        }
+        if(queryExecutionStrategy != null) {
+            graphql.queryExecutionStrategy(queryExecutionStrategy);
+        }
+        if(mutationExecutionStrategy != null) {
+            graphql.mutationExecutionStrategy(mutationExecutionStrategy);
+        }
+        if(subscriptionExecutionStrategy != null) {
+            graphql.subscriptionExecutionStrategy(subscriptionExecutionStrategy);
         }
         return graphql.build();
     }
