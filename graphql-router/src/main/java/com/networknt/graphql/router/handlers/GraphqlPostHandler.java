@@ -58,11 +58,7 @@ public class GraphqlPostHandler implements HttpHandler {
         ExecutionStrategyProvider executionStrategyProvider = SingletonServiceFactory.getBean(ExecutionStrategyProvider.class);
         if(executionStrategyProvider != null) {
             queryExecutionStrategy = executionStrategyProvider.getQueryExecutionStrategy();
-        }
-        if(executionStrategyProvider != null) {
             mutationExecutionStrategy = executionStrategyProvider.getMutationExecutionStrategy();
-        }
-        if(executionStrategyProvider != null) {
             subscriptionExecutionStrategy = executionStrategyProvider.getSubscriptionExecutionStrategy();
         }
     }
