@@ -22,8 +22,8 @@ import com.networknt.exception.ExpiredTokenException;
 import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
+import com.networknt.httpstring.HttpStringConstants;
 import com.networknt.security.JwtHelper;
-import com.networknt.status.Status;
 import com.networknt.utility.Constants;
 import com.networknt.utility.ModuleRegistry;
 import io.undertow.Handlers;
@@ -99,7 +99,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
 
 
                     // is there a scope token
-                    String scopeHeader = headerMap.getFirst(Constants.SCOPE_TOKEN);
+                    String scopeHeader = headerMap.getFirst(HttpStringConstants.SCOPE_TOKEN);
                     String scopeJwt = JwtHelper.getJwtFromAuthorization(scopeHeader);
                     List<String> secondaryScopes = null;
                     if(scopeJwt != null) {
