@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 /**
- * Lists standard GraphQl endpoints at /graphql and /subscriptions.
+ * Lists standard GraphQl endpoints at /graphql (or as reconfigured in Graphql.config)
  */
 public class GraphqlEndpointSource implements EndpointSource {
 
