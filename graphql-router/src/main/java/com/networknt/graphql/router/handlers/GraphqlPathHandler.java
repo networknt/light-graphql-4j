@@ -11,6 +11,11 @@ import io.undertow.util.Methods;
  */
 public class GraphqlPathHandler implements HttpHandler {
 
+    // create handler instances here so that one one instance is created.
+    GraphqlGetHandler graphqlGetHandler = new GraphqlGetHandler();
+    GraphqlPostHandler graphqlPostHandler = new GraphqlPostHandler();
+    GraphqlOptionsHandler graphqlOptionsHandler = new GraphqlOptionsHandler();
+
     /**
      * Map requests that come to the graphql endpoint within graphql.yml to either GET or POST.
      */
@@ -18,13 +23,13 @@ public class GraphqlPathHandler implements HttpHandler {
     public void handleRequest(HttpServerExchange httpServerExchange) throws Exception {
         if (Methods.GET.equals(httpServerExchange.getRequestMethod())) {
             // Get will return the rendered graphiql content.
-            new GraphqlGetHandler().handleRequest(httpServerExchange);
+            graphqlGetHandler.handleRequest(httpServerExchange);
         } else if (Methods.POST.equals(httpServerExchange.getRequestMethod())) {
             // Post will return results from graphql queries.
-            new GraphqlPostHandler().handleRequest(httpServerExchange);
+            graphqlPostHandler.handleRequest(httpServerExchange);
         } else if (Methods.OPTIONS.equals(httpServerExchange.getRequestMethod())) {
             // Option will return introspection queries.
-            new GraphqlOptionsHandler().handleRequest(httpServerExchange);
+            graphqlOptionsHandler.handleRequest(httpServerExchange);
         } else {
             throw new Exception(String.format("Unsupported request method %s", httpServerExchange.getRequestMethod().toString()));
         }
