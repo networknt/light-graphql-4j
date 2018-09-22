@@ -1,5 +1,18 @@
 # Change Log
 
+## [1.5.19](https://github.com/networknt/light-graphql-4j/tree/1.5.19) (2018-09-22)
+[Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.18...1.5.19)
+
+**Closed issues:**
+
+- create one and only one handler instance in GraphqlPathHandler [\#50](https://github.com/networknt/light-graphql-4j/issues/50)
+- switch to http-string module for HttpString headers constants [\#48](https://github.com/networknt/light-graphql-4j/issues/48)
+
+**Merged pull requests:**
+
+- Trivial GraphqlEndpointSource listing `/graphql@{get,post,options}`… [\#49](https://github.com/networknt/light-graphql-4j/pull/49) ([logi](https://github.com/logi))
+- Configurable Exectution Strategies [\#47](https://github.com/networknt/light-graphql-4j/pull/47) ([logi](https://github.com/logi))
+
 ## [1.5.18](https://github.com/networknt/light-graphql-4j/tree/1.5.18) (2018-08-16)
 [Full Changelog](https://github.com/networknt/light-graphql-4j/compare/1.5.17...1.5.18)
 
