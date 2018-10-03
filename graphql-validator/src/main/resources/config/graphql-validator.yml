@@ -1,0 +1,9 @@
+# A light-graphql-4j framework specific validator configuration. It is introduced to support multiple
+# frameworks in the same server instance and it is recommended. The old validator.yml will be loaded
+# if graphql-validator.yml cannot be found for backward compatibility and it might be removed in the
+# next major release.
+---
+# Enable request validation against the specification
+enabled: true
+# Log error message if validation error occurs
+logError: true
