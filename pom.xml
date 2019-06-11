@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.networknt</groupId>
     <artifactId>light-graphql-4j</artifactId>
-    <version>1.6.5-SNAPSHOT</version>
+    <version>2.0.0</version>
     <packaging>pom</packaging>
     <name>Parent POM</name>
     <description>Light 4J Framework GraphQL Components</description>
@@ -90,9 +90,9 @@
     </repositories>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.light-4j>1.6.5-SNAPSHOT</version.light-4j>
+        <version.light-4j>2.0.0</version.light-4j>
         <version.jackson>2.9.9</version.jackson>
         <version.slf4j>1.7.25</version.slf4j>
         <version.jose4j>0.6.3</version.jose4j>
@@ -104,6 +104,7 @@
         <version.assertj>3.8.0</version.assertj>
         <version.graphql>8.0</version.graphql>
         <versions.maven-version>2.4</versions.maven-version>
+        <version.javadoc-packagelist-plugin>1.0.0</version.javadoc-packagelist-plugin>
         <argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
     </properties>
 
@@ -354,6 +355,19 @@
 
         <plugins>
             <plugin>
+                <groupId>com.networknt</groupId>
+                <artifactId>javadoc-packagelist-maven-plugin</artifactId>
+                <version>${version.javadoc-packagelist-plugin}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>gen-package-list</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>${versions.maven-version}</version>
@@ -448,34 +462,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.8.0</version>
                 <configuration>
-                    <compilerId>javac-with-errorprone</compilerId>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
-                    <compilerArgs>
-                        <!-- add command line validation here -->
-                    </compilerArgs>
-                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
-                    <!-- maven-compiler-plugin defaults to targeting Java 5, but our javac
-                         only supports >=6 -->
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>10</release>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <artifactId>plexus-compiler-javac-errorprone</artifactId>
-                        <version>2.8</version>
-                    </dependency>
-                    <!-- override plexus-compiler-javac-errorprone's dependency on
-                         Error Prone with the latest version -->
-                    <dependency>
-                        <groupId>com.google.errorprone</groupId>
-                        <artifactId>error_prone_core</artifactId>
-                        <version>2.0.15</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
         <pluginManagement>
