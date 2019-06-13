@@ -23,7 +23,7 @@ import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.httpstring.HttpStringConstants;
 import com.networknt.security.JwtHelper;
-import com.networknt.status.exception.ExpiredTokenException;
+import com.networknt.exception.ExpiredTokenException;
 import com.networknt.utility.Constants;
 import com.networknt.utility.ModuleRegistry;
 import io.undertow.Handlers;
