@@ -1,5 +1,11 @@
 # Change Log
 
+## [2.0.4](https://github.com/networknt/light-graphql-4j/tree/2.0.4) (2019-08-16)
+
+
+**Merged pull requests:**
+
+
 ## [2.0.3](https://github.com/networknt/light-graphql-4j/tree/2.0.3) (2019-07-31)
 
 
