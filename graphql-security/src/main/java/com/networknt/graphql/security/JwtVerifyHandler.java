@@ -22,8 +22,9 @@ import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.httpstring.HttpStringConstants;
-import com.networknt.security.JwtHelper;
+import com.networknt.security.IJwtVerifyHandler;
 import com.networknt.exception.ExpiredTokenException;
+import com.networknt.security.JwtVerifier;
 import com.networknt.utility.Constants;
 import com.networknt.utility.ModuleRegistry;
 import io.undertow.Handlers;
@@ -53,7 +54,7 @@ import java.util.Map;
  * @author Steve Hu
  *
  */
-public class JwtVerifyHandler implements MiddlewareHandler {
+public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
     private static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandler.class);
 
     private static final String GRAPHQL_SECURITY_CONFIG = "graphql-security";
@@ -68,11 +69,13 @@ public class JwtVerifyHandler implements MiddlewareHandler {
     private static final String STATUS_SCOPE_TOKEN_SCOPE_MISMATCH = "ERR10006";
 
     static Map<String, Object> config;
+    static JwtVerifier jwtVerifier;
     static {
         // check if openapi-security.yml exist
         config = Config.getInstance().getJsonMapConfig(GRAPHQL_SECURITY_CONFIG);
         // fallback to generic security.yml
-        if(config == null) config = Config.getInstance().getJsonMapConfig(JwtHelper.SECURITY_CONFIG);
+        if(config == null) config = Config.getInstance().getJsonMapConfig(JwtVerifier.SECURITY_CONFIG);
+        jwtVerifier = new JwtVerifier(config);
     }
 
     private volatile HttpHandler next;
@@ -83,10 +86,10 @@ public class JwtVerifyHandler implements MiddlewareHandler {
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
         HeaderMap headerMap = exchange.getRequestHeaders();
         String authorization = headerMap.getFirst(Headers.AUTHORIZATION);
-        String jwt = JwtHelper.getJwtFromAuthorization(authorization);
+        String jwt = jwtVerifier.getJwtFromAuthorization(authorization);
         if(jwt != null) {
             try {
-                JwtClaims claims = JwtHelper.verifyJwt(jwt, false);
+                JwtClaims claims = jwtVerifier.verifyJwt(jwt, false, true);
                 Map<String, Object> auditInfo = new HashMap<>();
                 auditInfo.put(Constants.ENDPOINT_STRING, GraphqlUtil.config.getPath());
                 auditInfo.put(Constants.CLIENT_ID_STRING, claims.getStringClaimValue(Constants.CLIENT_ID_STRING));
@@ -100,11 +103,11 @@ public class JwtVerifyHandler implements MiddlewareHandler {
 
                     // is there a scope token
                     String scopeHeader = headerMap.getFirst(HttpStringConstants.SCOPE_TOKEN);
-                    String scopeJwt = JwtHelper.getJwtFromAuthorization(scopeHeader);
+                    String scopeJwt = jwtVerifier.getJwtFromAuthorization(scopeHeader);
                     List<String> secondaryScopes = null;
                     if(scopeJwt != null) {
                         try {
-                            JwtClaims scopeClaims = JwtHelper.verifyJwt(scopeJwt, false);
+                            JwtClaims scopeClaims = jwtVerifier.verifyJwt(scopeJwt, false,  true);
                             secondaryScopes = scopeClaims.getStringListClaimValue("scope");
                             auditInfo.put(Constants.SCOPE_CLIENT_ID_STRING, scopeClaims.getStringClaimValue(Constants.CLIENT_ID_STRING));
                             auditInfo.put(Constants.ACCESS_CLAIMS, scopeClaims);
@@ -189,7 +192,7 @@ public class JwtVerifyHandler implements MiddlewareHandler {
 
     @Override
     public boolean isEnabled() {
-        Object object = config.get(JwtHelper.ENABLE_VERIFY_JWT);
+        Object object = config.get(JwtVerifier.ENABLE_VERIFY_JWT);
         return object != null && (Boolean) object;
     }
 
@@ -198,4 +201,8 @@ public class JwtVerifyHandler implements MiddlewareHandler {
         ModuleRegistry.registerModule(JwtVerifyHandler.class.getName(), config, null);
     }
 
+    @Override
+    public JwtVerifier getJwtVerifier() {
+        return jwtVerifier;
+    }
 }
