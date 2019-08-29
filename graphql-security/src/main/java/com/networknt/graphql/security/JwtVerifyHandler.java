@@ -16,12 +16,12 @@
 
 package com.networknt.graphql.security;
 
-import com.networknt.audit.AuditHandler;
 import com.networknt.config.Config;
 import com.networknt.exception.ExpiredTokenException;
 import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
+import com.networknt.httpstring.AttachmentConstants;
 import com.networknt.httpstring.HttpStringConstants;
 import com.networknt.security.IJwtVerifyHandler;
 import com.networknt.security.JwtVerifier;
@@ -95,7 +95,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
                 auditInfo.put(Constants.CLIENT_ID_STRING, claims.getStringClaimValue(Constants.CLIENT_ID_STRING));
                 auditInfo.put(Constants.USER_ID_STRING, claims.getStringClaimValue(Constants.USER_ID_STRING));
                 auditInfo.put(Constants.SUBJECT_CLAIMS, claims);
-                exchange.putAttachment(AuditHandler.AUDIT_INFO, auditInfo);
+                exchange.putAttachment(AttachmentConstants.AUDIT_INFO, auditInfo);
                 if(config != null && (Boolean)config.get(ENABLE_VERIFY_SCOPE)) {
                     // need a way to figure out this is query or mutation, is it possible to have multiple queries
                     // and mutations? If yes, then each one will have a scope with operation_name.r or operation_name.w
