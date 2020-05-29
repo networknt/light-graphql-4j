@@ -6,6 +6,8 @@
 **Merged pull requests:**
 
 
+
+
 ## [1.6.19](https://github.com/networknt/light-graphql-4j/tree/1.6.19) (2020-05-01)
 
 
