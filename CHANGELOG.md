@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.6.23](https://github.com/networknt/light-graphql-4j/tree/1.6.23) (2020-06-22)
+
+
+**Merged pull requests:**
+
+
 ## [1.6.22](https://github.com/networknt/light-graphql-4j/tree/1.6.22) (2020-06-06)
 
 
