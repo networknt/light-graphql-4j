@@ -95,6 +95,8 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
                 auditInfo.put(Constants.CLIENT_ID_STRING, claims.getStringClaimValue(Constants.CLIENT_ID_STRING));
                 auditInfo.put(Constants.USER_ID_STRING, claims.getStringClaimValue(Constants.USER_ID_STRING));
                 auditInfo.put(Constants.SUBJECT_CLAIMS, claims);
+                String callerId = headerMap.getFirst(HttpStringConstants.CALLER_ID);
+                if(callerId != null) auditInfo.put(Constants.CALLER_ID_STRING, callerId);
                 exchange.putAttachment(AttachmentConstants.AUDIT_INFO, auditInfo);
                 if(config != null && (Boolean)config.get(ENABLE_VERIFY_SCOPE)) {
                     // need a way to figure out this is query or mutation, is it possible to have multiple queries
