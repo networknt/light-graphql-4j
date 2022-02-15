@@ -4,7 +4,7 @@ import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.graphql.router.ExecutionStrategyProvider;
 import com.networknt.graphql.common.InstrumentationLoader;
-import com.networknt.graphql.common.InstrumentationProvider;
+import com.networknt.graphql.router.GraphqlCustomHandler;
 import com.networknt.graphql.router.SchemaProvider;
 import com.networknt.service.SingletonServiceFactory;
 import com.networknt.status.Status;
@@ -42,6 +42,7 @@ public class GraphqlPostHandler implements HttpHandler {
     static ExecutionStrategy queryExecutionStrategy = null;
     static ExecutionStrategy mutationExecutionStrategy = null;
     static ExecutionStrategy subscriptionExecutionStrategy = null;
+    static GraphqlCustomHandler customHandler = null;
 
     static {
         // load GraphQL Schema with service loader. It should be defined in service.yml
@@ -52,6 +53,10 @@ public class GraphqlPostHandler implements HttpHandler {
         if (schema == null) {
             logger.error("Unable to load GraphQL schema - no SchemaProvider implementation in service.yml");
             throw new RuntimeException("Unable to load GraphQL schema - no SchemaProvider implementation in service.yml");
+        }
+        GraphqlCustomHandler handler = SingletonServiceFactory.getBean(GraphqlCustomHandler.class);
+        if(handler != null ){
+            customHandler = handler;
         }
 
         // Replace default execution strategies if so configured.
@@ -88,16 +93,20 @@ public class GraphqlPostHandler implements HttpHandler {
         String operationName = (String)requestParameters.get(GRAPHQL_REQUEST_OP_NAME_KEY);
         ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query).operationName(operationName).context(exchange).root(exchange).variables(variables).build();
         ExecutionResult executionResult = graphQL.execute(executionInput);
-        Map<String, Object> result = new HashMap<>();
-        if (executionResult.getErrors().size() > 0) {
-            result.put(GRAPHQL_RESPONSE_ERROR_KEY, executionResult.getErrors());
-            logger.error("Errors: {}", executionResult.getErrors());
+        if (customHandler != null) {
+            customHandler.handleResponse(exchange, executionResult);
         } else {
-            result.put(GRAPHQL_RESPONSE_DATA_KEY, executionResult.getData());
+            Map<String, Object> result = new HashMap<>();
+            if (executionResult.getErrors().size() > 0) {
+                result.put(GRAPHQL_RESPONSE_ERROR_KEY, executionResult.getErrors());
+                logger.error("Errors: {}", executionResult.getErrors());
+            } else {
+                result.put(GRAPHQL_RESPONSE_DATA_KEY, executionResult.getData());
+            }
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
+            exchange.setStatusCode(StatusCodes.OK);
+            exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(result));
         }
-        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
-        exchange.setStatusCode(StatusCodes.OK);
-        exchange.getResponseSender().send(Config.getInstance().getMapper().writeValueAsString(result));
     }
 
     private GraphQL getGraphql() {
