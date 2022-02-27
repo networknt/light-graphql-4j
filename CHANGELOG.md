@@ -1,5 +1,14 @@
 # Change Log
 
+## [2.1.0](https://github.com/networknt/light-graphql-4j/tree/2.1.0) (2022-02-27)
+
+
+**Merged pull requests:**
+
+
+- custom response handling [\#81](https://github.com/networknt/light-graphql-4j/pull/81) ([wokere](https://github.com/wokere))
+
+
 ## [2.0.32](https://github.com/networknt/light-graphql-4j/tree/2.0.32) (2021-10-19)
 
 
