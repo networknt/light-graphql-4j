@@ -25,6 +25,7 @@ import com.networknt.httpstring.HttpStringConstants;
 import com.networknt.security.IJwtVerifyHandler;
 import com.networknt.exception.ExpiredTokenException;
 import com.networknt.security.JwtVerifier;
+import com.networknt.security.SecurityConfig;
 import com.networknt.utility.Constants;
 import com.networknt.utility.ModuleRegistry;
 import io.undertow.Handlers;
@@ -59,8 +60,6 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
     private static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandler.class);
 
     private static final String GRAPHQL_SECURITY_CONFIG = "graphql-security";
-    private static final String ENABLE_VERIFY_SCOPE = "enableVerifyScope";
-
     private static final String STATUS_INVALID_AUTH_TOKEN = "ERR10000";
     private static final String STATUS_AUTH_TOKEN_EXPIRED = "ERR10001";
     private static final String STATUS_MISSING_AUTH_TOKEN = "ERR10002";
@@ -69,13 +68,10 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
     private static final String STATUS_AUTH_TOKEN_SCOPE_MISMATCH = "ERR10005";
     private static final String STATUS_SCOPE_TOKEN_SCOPE_MISMATCH = "ERR10006";
 
-    static Map<String, Object> config;
+    static SecurityConfig config;
     static JwtVerifier jwtVerifier;
     static {
-        // check if openapi-security.yml exist
-        config = Config.getInstance().getJsonMapConfig(GRAPHQL_SECURITY_CONFIG);
-        // fallback to generic security.yml
-        if(config == null) config = Config.getInstance().getJsonMapConfig(JwtVerifier.SECURITY_CONFIG);
+        config = SecurityConfig.load(GRAPHQL_SECURITY_CONFIG);
         jwtVerifier = new JwtVerifier(config);
     }
 
@@ -105,7 +101,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
                 String callerId = headerMap.getFirst(HttpStringConstants.CALLER_ID);
                 if(callerId != null) auditInfo.put(Constants.CALLER_ID_STRING, callerId);
                 exchange.putAttachment(AttachmentConstants.AUDIT_INFO, auditInfo);
-                if(config != null && (Boolean)config.get(ENABLE_VERIFY_SCOPE)) {
+                if(config != null && config.isEnableVerifyScope()) {
                     // need a way to figure out this is query or mutation, is it possible to have multiple queries
                     // and mutations? If yes, then each one will have a scope with operation_name.r or operation_name.w
 
@@ -229,13 +225,17 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
     @Override
     public boolean isEnabled() {
-        Object object = config.get(JwtVerifier.ENABLE_VERIFY_JWT);
-        return object != null && (Boolean) object;
+        return config.isEnableVerifyJwt();
     }
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(JwtVerifyHandler.class.getName(), config, null);
+        ModuleRegistry.registerModule(JwtVerifyHandler.class.getName(), Config.getInstance().getJsonMapConfigNoCache(GRAPHQL_SECURITY_CONFIG), null);
+    }
+
+    @Override
+    public void reload() {
+        config.reload(GRAPHQL_SECURITY_CONFIG);
     }
 
     @Override
