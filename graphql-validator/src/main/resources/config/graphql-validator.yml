@@ -4,6 +4,6 @@
 # next major release.
 ---
 # Enable request validation against the specification
-enabled: true
+enabled: ${graphql-validator:true}
 # Log error message if validation error occurs
-logError: true
+logError: ${graphql-validator:true}
