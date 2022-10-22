@@ -1,5 +1,16 @@
 # Change Log
 
+## [2.1.2](https://github.com/networknt/light-graphql-4j/tree/2.1.2) (2022-10-22)
+
+
+**Merged pull requests:**
+
+
+- fixes \#91 pass in request path to verifyJwt to support mulitple OAuth… [\#92](https://github.com/networknt/light-graphql-4j/pull/92) ([stevehu](https://github.com/stevehu))
+- fixes \#89 update graphql-security.yml to use JsonWebKeySet for keyRes… [\#90](https://github.com/networknt/light-graphql-4j/pull/90) ([stevehu](https://github.com/stevehu))
+- fixes \#87 add providerId to the security.yml for oauth key service [\#88](https://github.com/networknt/light-graphql-4j/pull/88) ([stevehu](https://github.com/stevehu))
+- fixes \#85 externalize the graphql-validator.yml in the default folder [\#86](https://github.com/networknt/light-graphql-4j/pull/86) ([stevehu](https://github.com/stevehu))
+- fixes \#83 Update JwtVerifierHandler to use SecurityConfig [\#84](https://github.com/networknt/light-graphql-4j/pull/84) ([stevehu](https://github.com/stevehu))
 ## [2.1.1](https://github.com/networknt/light-graphql-4j/tree/2.1.1) (2022-04-26)
 
 
