@@ -87,7 +87,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
         String jwt = jwtVerifier.getJwtFromAuthorization(authorization);
         if(jwt != null) {
             try {
-                JwtClaims claims = jwtVerifier.verifyJwt(jwt, false, true, reqPath);
+                JwtClaims claims = jwtVerifier.verifyJwt(jwt, false, true, null, reqPath, null);
                 Map<String, Object> auditInfo = new HashMap<>();
                 auditInfo.put(Constants.ENDPOINT_STRING, GraphqlUtil.config.getPath());
                 String clientId = claims.getStringClaimValue(Constants.CLIENT_ID_STRING);
@@ -113,7 +113,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
                     List<String> secondaryScopes = null;
                     if(scopeJwt != null) {
                         try {
-                            JwtClaims scopeClaims = jwtVerifier.verifyJwt(scopeJwt, false,  true, reqPath);
+                            JwtClaims scopeClaims = jwtVerifier.verifyJwt(scopeJwt, false,  true, null, reqPath, null);
                             Object scopeClaim = scopeClaims.getClaimValue(Constants.SCOPE_STRING);
                             if(scopeClaim instanceof String) {
                                 secondaryScopes = Arrays.asList(scopeClaims.getStringClaimValue(Constants.SCOPE_STRING).split(" "));
