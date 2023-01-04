@@ -1,5 +1,14 @@
 # Change Log
 
+## [2.1.5](https://github.com/networknt/light-graphql-4j/tree/2.1.5) (2023-01-04)
+
+
+**Merged pull requests:**
+
+
+- fixes \#101 update JwtVerifyHandler for the new signature [\#102](https://github.com/networknt/light-graphql-4j/pull/102) ([stevehu](https://github.com/stevehu))
+- fixes \#99 add skipVerifyScopeWithoutSpec flag to graphql-security.yml [\#100](https://github.com/networknt/light-graphql-4j/pull/100) ([stevehu](https://github.com/stevehu))
+- fixes \#97 update openapi-security.yml to add jwtCacheFullSize [\#98](https://github.com/networknt/light-graphql-4j/pull/98) ([stevehu](https://github.com/stevehu))
 ## [2.1.4](https://github.com/networknt/light-graphql-4j/tree/2.1.4) (2022-11-30)
 
 
