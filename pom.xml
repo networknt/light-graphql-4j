@@ -100,7 +100,7 @@
         <version.logback>1.2.11</version.logback>
         <version.junit>4.13.1</version.junit>
         <version.mockito>2.10.0</version.mockito>
-        <version.undertow>2.3.0.Final</version.undertow>
+        <version.undertow>2.3.3.Final</version.undertow>
         <version.assertj>3.8.0</version.assertj>
         <version.graphql>19.0</version.graphql>
         <versions.maven-version>2.4</versions.maven-version>
