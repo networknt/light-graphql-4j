@@ -84,7 +84,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
         HeaderMap headerMap = exchange.getRequestHeaders();
         String reqPath = exchange.getRequestPath();
         String authorization = headerMap.getFirst(Headers.AUTHORIZATION);
-        String jwt = jwtVerifier.getJwtFromAuthorization(authorization);
+        String jwt = jwtVerifier.getTokenFromAuthorization(authorization);
         if(jwt != null) {
             try {
                 JwtClaims claims = jwtVerifier.verifyJwt(jwt, false, true, null, reqPath, null);
@@ -109,7 +109,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
                     // is there a scope token
                     String scopeHeader = headerMap.getFirst(HttpStringConstants.SCOPE_TOKEN);
-                    String scopeJwt = jwtVerifier.getJwtFromAuthorization(scopeHeader);
+                    String scopeJwt = jwtVerifier.getTokenFromAuthorization(scopeHeader);
                     List<String> secondaryScopes = null;
                     if(scopeJwt != null) {
                         try {
