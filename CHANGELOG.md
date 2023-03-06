@@ -1,5 +1,12 @@
 # Change Log
 
+## [2.1.8](https://github.com/networknt/light-graphql-4j/tree/2.1.8) (2023-03-06)
+
+
+**Merged pull requests:**
+
+
+- fixes \#103 update the JwtVerifyHandler to get the token from the auth… [\#104](https://github.com/networknt/light-graphql-4j/pull/104) ([stevehu](https://github.com/stevehu))
 ## [2.1.7](https://github.com/networknt/light-graphql-4j/tree/2.1.7) (2023-02-14)
 
 
