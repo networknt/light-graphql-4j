@@ -231,12 +231,13 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(JwtVerifyHandler.class.getName(), Config.getInstance().getJsonMapConfigNoCache(GRAPHQL_SECURITY_CONFIG), null);
+        ModuleRegistry.registerModule(GRAPHQL_SECURITY_CONFIG, JwtVerifyHandler.class.getName(), config.getMappedConfig(), null);
     }
 
     @Override
     public void reload() {
         config.reload(GRAPHQL_SECURITY_CONFIG);
+        ModuleRegistry.registerModule(GRAPHQL_SECURITY_CONFIG, JwtVerifyHandler.class.getName(), config.getMappedConfig(), null);
     }
 
     @Override

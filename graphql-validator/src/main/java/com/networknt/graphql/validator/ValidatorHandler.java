@@ -57,16 +57,13 @@ public class ValidatorHandler implements MiddlewareHandler {
     static final Logger logger = LoggerFactory.getLogger(ValidatorHandler.class);
 
     static ValidatorConfig config;
-    static {
-        config = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(GRAPHQL_CONFIG_NAME, ValidatorConfig.class);
-        if(config == null) {
-            config = (ValidatorConfig)Config.getInstance().getJsonObjectConfig(CONFIG_NAME, ValidatorConfig.class);
-        }
-    }
 
     private volatile HttpHandler next;
 
-    public ValidatorHandler() {}
+    public ValidatorHandler() {
+        if(logger.isDebugEnabled()) logger.debug("ValidatorHandler is constructed");
+        config = ValidatorConfig.load(GRAPHQL_CONFIG_NAME);
+    }
 
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
@@ -132,7 +129,13 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(ValidatorHandler.class.getName(), Config.getInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+        ModuleRegistry.registerModule(GRAPHQL_CONFIG_NAME, ValidatorHandler.class.getName(), config.getMappedConfig(), null);
+    }
+
+    @Override
+    public void reload() {
+        config.reload(GRAPHQL_CONFIG_NAME);
+        ModuleRegistry.registerModule(GRAPHQL_CONFIG_NAME, ValidatorHandler.class.getName(), config.getMappedConfig(), null);
     }
 
 }
