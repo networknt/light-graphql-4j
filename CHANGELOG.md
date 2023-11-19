@@ -8,6 +8,8 @@
 
 - fixes \#107 refactor module registry to add config name [\#108](https://github.com/networknt/light-graphql-4j/pull/108) ([stevehu](https://github.com/stevehu))
 - fixes \#105 sync the graphql-security.yml with the security.yml in lig… [\#106](https://github.com/networknt/light-graphql-4j/pull/106) ([stevehu](https://github.com/stevehu))
+
+
 ## [2.1.28](https://github.com/networknt/light-graphql-4j/tree/2.1.28) (2023-10-24)
 
 
