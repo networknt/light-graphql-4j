@@ -1,0 +1,6 @@
+# client.yml
+client.tokenKeyServerUrl: http://localhost:7080
+client.tokenKeyUri: /oauth2/N2CMw0HGQXeLvC1wBfln2A/keys
+# graphql-security.yml
+graphql-security.skipPathPrefixes:
+  - /oauth2
