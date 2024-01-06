@@ -16,7 +16,6 @@
 
 package com.networknt.graphql.security;
 
-import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
@@ -70,19 +69,30 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
     static SecurityConfig config;
     static JwtVerifier jwtVerifier;
-    static {
-        config = SecurityConfig.load(GRAPHQL_SECURITY_CONFIG);
-        jwtVerifier = new JwtVerifier(config);
-    }
 
     private volatile HttpHandler next;
 
-    public JwtVerifyHandler() {}
+    public JwtVerifyHandler() {
+        config = SecurityConfig.load(GRAPHQL_SECURITY_CONFIG);
+        jwtVerifier = new JwtVerifier(config);
+        if(logger.isDebugEnabled()) logger.debug("JwtVerifyHandler is constructed");
+    }
 
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
-        HeaderMap headerMap = exchange.getRequestHeaders();
         String reqPath = exchange.getRequestPath();
+        if(logger.isTraceEnabled()) logger.debug("handleRequest with request path {}", reqPath);
+        // if request path is in the skipPathPrefixes in the config, call the next handler directly to skip the security check.
+        if (config.getSkipPathPrefixes() != null && config.getSkipPathPrefixes().stream().anyMatch(reqPath::startsWith)) {
+            if(logger.isTraceEnabled())
+                logger.trace("Skip request path base on skipPathPrefixes for " + reqPath);
+            Handler.next(exchange, next);
+            if (logger.isDebugEnabled())
+                logger.debug("JwtVerifyHandler.handleRequest ends.");
+            return;
+        }
+
+        HeaderMap headerMap = exchange.getRequestHeaders();
         String authorization = headerMap.getFirst(Headers.AUTHORIZATION);
         String jwt = jwtVerifier.getTokenFromAuthorization(authorization);
         if(jwt != null) {
