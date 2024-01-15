@@ -8,6 +8,8 @@
 
 - fixes \#112 Fix test cases by adding a new server2 for jwks endpoint [\#113](https://github.com/networknt/light-graphql-4j/pull/113) ([stevehu](https://github.com/stevehu))
 - fixes \#110 update test cases to use jwks endpoint and add skipPathPre… [\#111](https://github.com/networknt/light-graphql-4j/pull/111) ([stevehu](https://github.com/stevehu))
+
+
 ## [2.1.30](https://github.com/networknt/light-graphql-4j/tree/2.1.30) (2023-11-21)
 
 
