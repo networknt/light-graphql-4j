@@ -129,13 +129,13 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(GRAPHQL_CONFIG_NAME, ValidatorHandler.class.getName(), config.getMappedConfig(), null);
+        ModuleRegistry.registerModule(GRAPHQL_CONFIG_NAME, ValidatorHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(GRAPHQL_CONFIG_NAME), null);
     }
 
     @Override
     public void reload() {
         config.reload(GRAPHQL_CONFIG_NAME);
-        ModuleRegistry.registerModule(GRAPHQL_CONFIG_NAME, ValidatorHandler.class.getName(), config.getMappedConfig(), null);
+        ModuleRegistry.registerModule(GRAPHQL_CONFIG_NAME, ValidatorHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(GRAPHQL_CONFIG_NAME), null);
     }
 
 }

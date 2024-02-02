@@ -16,6 +16,7 @@
 
 package com.networknt.graphql.security;
 
+import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
@@ -241,13 +242,13 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(GRAPHQL_SECURITY_CONFIG, JwtVerifyHandler.class.getName(), config.getMappedConfig(), null);
+        ModuleRegistry.registerModule(GRAPHQL_SECURITY_CONFIG, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(GRAPHQL_SECURITY_CONFIG), null);
     }
 
     @Override
     public void reload() {
         config.reload(GRAPHQL_SECURITY_CONFIG);
-        ModuleRegistry.registerModule(GRAPHQL_SECURITY_CONFIG, JwtVerifyHandler.class.getName(), config.getMappedConfig(), null);
+        ModuleRegistry.registerModule(GRAPHQL_SECURITY_CONFIG, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(GRAPHQL_SECURITY_CONFIG), null);
     }
 
     @Override
