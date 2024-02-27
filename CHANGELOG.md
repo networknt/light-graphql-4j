@@ -9,6 +9,8 @@
 - [pre-commit.ci] pre-commit autoupdate [\#118](https://github.com/networknt/light-graphql-4j/pull/118) ([pre-commit-ci](https://github.com/apps/pre-commit-ci))
 - fixes \#116 add pre-commit hook and apply it [\#117](https://github.com/networknt/light-graphql-4j/pull/117) ([stevehu](https://github.com/stevehu))
 - fixes \#114 Use NoneDecryptedInstance to load the config for registerM… [\#115](https://github.com/networknt/light-graphql-4j/pull/115) ([stevehu](https://github.com/stevehu))
+
+
 ## [2.1.31](https://github.com/networknt/light-graphql-4j/tree/2.1.31) (2024-01-16)
 
 
