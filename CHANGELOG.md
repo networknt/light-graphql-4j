@@ -1,5 +1,15 @@
 # Change Log
 
+## [2.1.34](https://github.com/networknt/light-graphql-4j/tree/2.1.34) (2024-06-22)
+
+
+**Merged pull requests:**
+
+
+- fixes \#120 add client.truststore in test config [\#121](https://github.com/networknt/light-graphql-4j/pull/121) ([stevehu](https://github.com/stevehu))
+- [pre-commit.ci] pre-commit autoupdate [\#119](https://github.com/networknt/light-graphql-4j/pull/119) ([pre-commit-ci](https://github.com/apps/pre-commit-ci))
+
+
 ## [2.1.33](https://github.com/networknt/light-graphql-4j/tree/2.1.33) (2024-03-31)
 
 
