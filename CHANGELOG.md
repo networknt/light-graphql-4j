@@ -1,5 +1,12 @@
 # Change Log
 
+## [2.1.35](https://github.com/networknt/light-graphql-4j/tree/2.1.35) (2024-08-17)
+
+
+**Merged pull requests:**
+
+
+- fixes \#122 update test cases to add use sig for the jwk response [\#123](https://github.com/networknt/light-graphql-4j/pull/123) ([stevehu](https://github.com/stevehu))
 ## [2.1.34](https://github.com/networknt/light-graphql-4j/tree/2.1.34) (2024-06-22)
 
 
