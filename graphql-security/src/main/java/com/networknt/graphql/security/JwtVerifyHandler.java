@@ -48,7 +48,7 @@ import java.util.Map;
  * This is the JWT token verifier for GraphQL. Given there is no OpenAPI spec available for
  * scopes, we have to verify the scope just based on query and mutation which is read and write.
  *
- * Regarding to the authorization, GraphQL spec doesn't have anything built-in and it is
+ * Regard to the authorization, GraphQL spec doesn't have anything built-in, and it is
  * recommended to handle at the business logic layer. As we are trying to address the cross-cutting
  * concerns at middleware level within the framework, we don't want to inject anything extra into
  * the schema for authorization.
