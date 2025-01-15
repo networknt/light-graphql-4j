@@ -103,11 +103,11 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
                 auditInfo.put(Constants.ENDPOINT_STRING, GraphqlUtil.config.getPath());
                 String clientId = claims.getStringClaimValue(Constants.CLIENT_ID_STRING);
                 // try to get the cid as some OAuth tokens name it as cid like Okta.
-                if(clientId == null) clientId = claims.getStringClaimValue(Constants.CID_STRING);
+                if(clientId == null) clientId = claims.getStringClaimValue(Constants.CID);
                 auditInfo.put(Constants.CLIENT_ID_STRING, clientId);
                 String userId = claims.getStringClaimValue(Constants.USER_ID_STRING);
                 // try to get the uid as some OAuth tokens name it as uid like Okta.
-                if(userId == null) userId = claims.getStringClaimValue(Constants.UID_STRING);
+                if(userId == null) userId = claims.getStringClaimValue(Constants.UID);
                 auditInfo.put(Constants.USER_ID_STRING, userId);
                 auditInfo.put(Constants.SUBJECT_CLAIMS, claims);
                 String callerId = headerMap.getFirst(HttpStringConstants.CALLER_ID);
