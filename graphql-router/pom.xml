@@ -21,12 +21,13 @@
     <parent>
         <groupId>com.networknt</groupId>
         <artifactId>light-graphql-4j</artifactId>
-        <version>2.2.2</version>
-        <relativePath>..</relativePath>
+        <version>2.2.3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>graphql-router</artifactId>
     <packaging>jar</packaging>
+    <name>graphql-router</name>
     <description>A route handler for GraphQL endpoint</description>
 
     <dependencies>

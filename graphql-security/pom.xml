@@ -21,12 +21,13 @@
     <parent>
         <groupId>com.networknt</groupId>
         <artifactId>light-graphql-4j</artifactId>
-        <version>2.2.2</version>
-        <relativePath>..</relativePath>
+        <version>2.2.3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>graphql-security</artifactId>
     <packaging>jar</packaging>
+    <name>graphql-security</name>
     <description>A security module that contains all handlers to protect your graphql endpoint</description>
 
     <dependencies>

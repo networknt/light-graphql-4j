@@ -21,12 +21,13 @@
     <parent>
         <groupId>com.networknt</groupId>
         <artifactId>light-graphql-4j</artifactId>
-        <version>2.2.2</version>
-        <relativePath>..</relativePath>
+        <version>2.2.3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>graphql-common</artifactId>
     <packaging>jar</packaging>
+    <name>graphql-common</name>
     <description>A shared utility module for GraphQL</description>
 
     <dependencies>
