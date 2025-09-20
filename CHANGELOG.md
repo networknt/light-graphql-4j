@@ -7,6 +7,8 @@
 
 
 - [pre-commit.ci] pre-commit autoupdate [\#129](https://github.com/networknt/light-graphql-4j/pull/129) ([pre-commit-ci](https://github.com/apps/pre-commit-ci))
+
+
 ## [2.3.0](https://github.com/networknt/light-graphql-4j/tree/2.3.0) (2025-06-25)
 
 
