@@ -1,6 +1,11 @@
 package com.networknt.graphql.validator;
 
 import com.networknt.config.Config;
+import com.networknt.config.schema.ConfigSchema; // REQUIRED IMPORT
+import com.networknt.config.schema.OutputFormat; // REQUIRED IMPORT
+import com.networknt.config.schema.BooleanField; // REQUIRED IMPORT
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -9,16 +14,46 @@ import java.util.Map;
  *
  * @author Steve Hu
  */
+@ConfigSchema(
+        configKey = "graphql-validator",
+        configName = "graphql-validator",
+        configDescription = "A light-graphql-4j framework specific validator configuration. It is introduced to support multiple\n" +
+                "frameworks in the same server instance and it is recommended. The old validator.yml will be loaded\n" +
+                "if graphql-validator.yml cannot be found for backward compatibility and it might be removed in the\n" +
+                "next major release.\n",
+        outputFormats = {OutputFormat.JSON_SCHEMA, OutputFormat.YAML}
+)
 public class ValidatorConfig {
-    public static final String CONFIG_NAME = "graphql-validator";
-    public static final String ENABLED = "enabled";
-    public static final String LOG_ERROR = "logError";
+    private static final Logger logger = LoggerFactory.getLogger(ValidatorConfig.class);
 
-    private boolean enabled;
-    private boolean logError;
+    public static final String CONFIG_NAME = "graphql-validator";
+    private static final String ENABLED = "enabled";
+    private static final String LOG_ERROR = "logError";
 
     private Map<String, Object> mappedConfig;
     private final Config config;
+
+    // --- Annotated Fields ---
+    @BooleanField(
+            configFieldName = ENABLED,
+            externalizedKeyName = ENABLED,
+            description = "Enable request validation against the specification.",
+            externalized = true,
+            defaultValue = "true"
+    )
+    private boolean enabled;
+
+    @BooleanField(
+            configFieldName = LOG_ERROR,
+            externalizedKeyName = LOG_ERROR,
+            description = "Log error message if validation error occurs.",
+            externalized = true,
+            defaultValue = "true"
+    )
+    private boolean logError;
+
+
+    // --- Constructor and Loading Logic ---
 
     private ValidatorConfig(String configName) {
         config = Config.getInstance();
@@ -46,6 +81,8 @@ public class ValidatorConfig {
         mappedConfig = config.getJsonMapConfigNoCache(configName);
         setConfigData();
     }
+
+    // --- Getters and Setters (Original Methods) ---
 
     public boolean isEnabled() {
         return enabled;
