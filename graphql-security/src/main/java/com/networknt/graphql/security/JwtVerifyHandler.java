@@ -59,7 +59,6 @@ import java.util.Map;
 public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
     private static final Logger logger = LoggerFactory.getLogger(JwtVerifyHandler.class);
 
-    private static final String GRAPHQL_SECURITY_CONFIG = "graphql-security";
     private static final String STATUS_INVALID_AUTH_TOKEN = "ERR10000";
     private static final String STATUS_AUTH_TOKEN_EXPIRED = "ERR10001";
     private static final String STATUS_MISSING_AUTH_TOKEN = "ERR10002";
@@ -74,7 +73,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
     private volatile HttpHandler next;
 
     public JwtVerifyHandler() {
-        config = SecurityConfig.load(GRAPHQL_SECURITY_CONFIG);
+        config = SecurityConfig.load();
         jwtVerifier = new JwtVerifier(config);
         if(logger.isDebugEnabled()) logger.debug("JwtVerifyHandler is constructed");
     }
@@ -242,13 +241,13 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
     @Override
     public void register() {
-        ModuleRegistry.registerModule(GRAPHQL_SECURITY_CONFIG, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(GRAPHQL_SECURITY_CONFIG), null);
+        ModuleRegistry.registerModule(SecurityConfig.CONFIG_NAME, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(SecurityConfig.CONFIG_NAME), null);
     }
 
     @Override
     public void reload() {
-        config.reload(GRAPHQL_SECURITY_CONFIG);
-        ModuleRegistry.registerModule(GRAPHQL_SECURITY_CONFIG, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(GRAPHQL_SECURITY_CONFIG), null);
+        config.reload();
+        ModuleRegistry.registerModule(SecurityConfig.CONFIG_NAME, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(SecurityConfig.CONFIG_NAME), null);
     }
 
     @Override
