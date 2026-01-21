@@ -38,7 +38,6 @@ public class ValidatorConfig {
             configFieldName = ENABLED,
             externalizedKeyName = ENABLED,
             description = "Enable request validation against the specification.",
-            externalized = true,
             defaultValue = "true"
     )
     private boolean enabled;
@@ -47,7 +46,6 @@ public class ValidatorConfig {
             configFieldName = LOG_ERROR,
             externalizedKeyName = LOG_ERROR,
             description = "Log error message if validation error occurs.",
-            externalized = true,
             defaultValue = "true"
     )
     private boolean logError;

@@ -39,7 +39,6 @@ public class GraphqlConfig {
             configFieldName = PATH,
             externalizedKeyName = PATH,
             description = "The path of GraphQL endpoint for both GET and POST.",
-            externalized = true,
             defaultValue = "/graphql"
     )
     private String path;
@@ -48,7 +47,6 @@ public class GraphqlConfig {
             configFieldName = SUBSCRIPTIONS_PATH,
             externalizedKeyName = SUBSCRIPTIONS_PATH,
             description = "Path to the websocket endpoint to handle subscription requests.",
-            externalized = true,
             defaultValue = "/subscriptions"
     )
     private String subscriptionsPath;
@@ -57,7 +55,6 @@ public class GraphqlConfig {
             configFieldName = ENABLE_GRAPHIQL,
             externalizedKeyName = ENABLE_GRAPHIQL,
             description = "Enable GraphiQL for development environment only. It allows testing from the Browser.",
-            externalized = true,
             defaultValue = "true"
     )
     private boolean enableGraphiQL;
