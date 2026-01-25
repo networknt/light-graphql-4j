@@ -4,10 +4,12 @@ import com.networknt.config.Config;
 import com.networknt.config.schema.ConfigSchema; // REQUIRED IMPORT
 import com.networknt.config.schema.OutputFormat; // REQUIRED IMPORT
 import com.networknt.config.schema.BooleanField; // REQUIRED IMPORT
+import com.networknt.server.ModuleRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * GraphQL validator configuration class
@@ -32,6 +34,7 @@ public class ValidatorConfig {
 
     private Map<String, Object> mappedConfig;
     private final Config config;
+    private static final Map<String, ValidatorConfig> instances = new ConcurrentHashMap<>();
 
     // --- Annotated Fields ---
     @BooleanField(
@@ -63,21 +66,40 @@ public class ValidatorConfig {
     }
 
     public static ValidatorConfig load(String configName) {
-        return new ValidatorConfig(configName);
+        ValidatorConfig instance = instances.get(configName);
+        if (instance != null) {
+            return instance;
+        }
+        synchronized (ValidatorConfig.class) {
+            instance = instances.get(configName);
+            if (instance != null) {
+                return instance;
+            }
+            instance = new ValidatorConfig(configName);
+            instances.put(configName, instance);
+            if (CONFIG_NAME.equals(configName)) {
+                ModuleRegistry.registerModule(CONFIG_NAME, ValidatorConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+            }
+            return instance;
+        }
     }
 
     public static ValidatorConfig load() {
-        return new ValidatorConfig();
+        return load(CONFIG_NAME);
     }
 
-    public void reload() {
-        mappedConfig = config.getJsonMapConfigNoCache(CONFIG_NAME);
-        setConfigData();
+    public static void reload() {
+        reload(CONFIG_NAME);
     }
 
-    public void reload(String configName) {
-        mappedConfig = config.getJsonMapConfigNoCache(configName);
-        setConfigData();
+    public static void reload(String configName) {
+        synchronized (ValidatorConfig.class) {
+            ValidatorConfig instance = new ValidatorConfig(configName);
+            instances.put(configName, instance);
+            if (CONFIG_NAME.equals(configName)) {
+                ModuleRegistry.registerModule(CONFIG_NAME, ValidatorConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+            }
+        }
     }
 
     // --- Getters and Setters (Original Methods) ---

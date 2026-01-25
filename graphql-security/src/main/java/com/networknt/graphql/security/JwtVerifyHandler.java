@@ -27,7 +27,7 @@ import com.networknt.exception.ExpiredTokenException;
 import com.networknt.security.JwtVerifier;
 import com.networknt.security.SecurityConfig;
 import com.networknt.utility.Constants;
-import com.networknt.utility.ModuleRegistry;
+import com.networknt.server.ModuleRegistry;
 import io.undertow.Handlers;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -246,7 +246,9 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
     @Override
     public void reload() {
-        config.reload();
+        SecurityConfig.reload();
+        config = SecurityConfig.load();
+        jwtVerifier = new JwtVerifier(config);
         ModuleRegistry.registerModule(SecurityConfig.CONFIG_NAME, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(SecurityConfig.CONFIG_NAME), null);
     }
 

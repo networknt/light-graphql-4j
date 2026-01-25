@@ -5,10 +5,12 @@ import com.networknt.config.schema.ConfigSchema; // REQUIRED IMPORT
 import com.networknt.config.schema.OutputFormat; // REQUIRED IMPORT
 import com.networknt.config.schema.BooleanField; // REQUIRED IMPORT
 import com.networknt.config.schema.StringField; // REQUIRED IMPORT
+import com.networknt.server.ModuleRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Main configuration class for graphql framework that defines the path for
@@ -32,6 +34,7 @@ public class GraphqlConfig {
 
     private final Config config;
     private Map<String, Object> mappedConfig;
+    private static final Map<String, GraphqlConfig> instances = new ConcurrentHashMap<>();
 
 
     // --- Annotated Fields ---
@@ -73,16 +76,40 @@ public class GraphqlConfig {
     }
 
     public static GraphqlConfig load() {
-        return new GraphqlConfig();
+        return load(CONFIG_NAME);
     }
 
     public static GraphqlConfig load(String configName) {
-        return new GraphqlConfig(configName);
+        GraphqlConfig instance = instances.get(configName);
+        if (instance != null) {
+            return instance;
+        }
+        synchronized (GraphqlConfig.class) {
+            instance = instances.get(configName);
+            if (instance != null) {
+                return instance;
+            }
+            instance = new GraphqlConfig(configName);
+            instances.put(configName, instance);
+            if (CONFIG_NAME.equals(configName)) {
+                ModuleRegistry.registerModule(CONFIG_NAME, GraphqlConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+            }
+            return instance;
+        }
     }
 
-    public void reload() {
-        mappedConfig = config.getJsonMapConfigNoCache(CONFIG_NAME);
-        setConfigData();
+    public static void reload() {
+        reload(CONFIG_NAME);
+    }
+
+    public static void reload(String configName) {
+        synchronized (GraphqlConfig.class) {
+            GraphqlConfig instance = new GraphqlConfig(configName);
+            instances.put(configName, instance);
+            if (CONFIG_NAME.equals(configName)) {
+                ModuleRegistry.registerModule(CONFIG_NAME, GraphqlConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+            }
+        }
     }
 
 

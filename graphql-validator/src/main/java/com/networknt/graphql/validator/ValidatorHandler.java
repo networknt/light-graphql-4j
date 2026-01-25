@@ -22,7 +22,7 @@ import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.Handler;
 import com.networknt.handler.MiddlewareHandler;
 import com.networknt.status.Status;
-import com.networknt.utility.ModuleRegistry;
+import com.networknt.server.ModuleRegistry;
 import io.undertow.Handlers;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -134,7 +134,8 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     @Override
     public void reload() {
-        config.reload(GRAPHQL_CONFIG_NAME);
+        ValidatorConfig.reload(GRAPHQL_CONFIG_NAME);
+        config = ValidatorConfig.load(GRAPHQL_CONFIG_NAME);
         ModuleRegistry.registerModule(GRAPHQL_CONFIG_NAME, ValidatorHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(GRAPHQL_CONFIG_NAME), null);
     }
 
