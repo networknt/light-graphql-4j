@@ -238,12 +238,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
     public boolean isEnabled() {
         return config.isEnableVerifyJwt();
     }
-
-    @Override
-    public void register() {
-        ModuleRegistry.registerModule(SecurityConfig.CONFIG_NAME, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(SecurityConfig.CONFIG_NAME), null);
-    }
-
+    /*
     @Override
     public void reload() {
         SecurityConfig.reload();
@@ -251,6 +246,7 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
         jwtVerifier = new JwtVerifier(config);
         ModuleRegistry.registerModule(SecurityConfig.CONFIG_NAME, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(SecurityConfig.CONFIG_NAME), null);
     }
+    */
 
     @Override
     public JwtVerifier getJwtVerifier() {

@@ -32,7 +32,7 @@ public class GraphqlConfig {
     private static final String SUBSCRIPTIONS_PATH = "subscriptionsPath";
     private static final String ENABLE_GRAPHIQL = "enableGraphiQL";
 
-    private final Config config;
+
     private Map<String, Object> mappedConfig;
     private static final Map<String, GraphqlConfig> instances = new ConcurrentHashMap<>();
 
@@ -70,8 +70,7 @@ public class GraphqlConfig {
     }
 
     private GraphqlConfig(String configName) {
-        config = Config.getInstance();
-        mappedConfig = config.getJsonMapConfigNoCache(configName);
+        mappedConfig = Config.getInstance().getJsonMapConfigNoCache(configName);
         setConfigData();
     }
 

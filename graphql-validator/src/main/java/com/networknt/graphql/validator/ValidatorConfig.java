@@ -33,7 +33,7 @@ public class ValidatorConfig {
     private static final String LOG_ERROR = "logError";
 
     private Map<String, Object> mappedConfig;
-    private final Config config;
+
     private static final Map<String, ValidatorConfig> instances = new ConcurrentHashMap<>();
 
     // --- Annotated Fields ---
@@ -57,8 +57,7 @@ public class ValidatorConfig {
     // --- Constructor and Loading Logic ---
 
     private ValidatorConfig(String configName) {
-        config = Config.getInstance();
-        mappedConfig = config.getJsonMapConfigNoCache(configName);
+        mappedConfig = Config.getInstance().getJsonMapConfigNoCache(configName);
         setConfigData();
     }
     private ValidatorConfig() {
