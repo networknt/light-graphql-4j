@@ -48,21 +48,17 @@ import java.util.Map;
  *
  */
 public class ValidatorHandler implements MiddlewareHandler {
-    public static final String GRAPHQL_CONFIG_NAME = "graphql-validator";
-    public static final String CONFIG_NAME = "validator";
 
     static final String STATUS_GRAPHQL_INVALID_PATH = "ERR11500";
     static final String STATUS_GRAPHQL_INVALID_METHOD = "ERR11501";
 
     static final Logger logger = LoggerFactory.getLogger(ValidatorHandler.class);
 
-    static ValidatorConfig config;
-
     private volatile HttpHandler next;
 
     public ValidatorHandler() {
         if(logger.isDebugEnabled()) logger.debug("ValidatorHandler is constructed");
-        config = ValidatorConfig.load(GRAPHQL_CONFIG_NAME);
+        ValidatorConfig.load();
     }
 
     @Override
@@ -90,7 +86,7 @@ public class ValidatorHandler implements MiddlewareHandler {
                         Map<String, Object> requestParameters = Config.getInstance().getMapper().readValue(s,
                                 new TypeReference<HashMap<String, Object>>() {
                                 });
-                        logger.debug("requestParameters = " + requestParameters);
+                        logger.debug("requestParameters = {}", requestParameters);
                         exchange1.putAttachment(GraphqlUtil.GRAPHQL_PARAMS, requestParameters);
                     }
                     Handler.next(exchange1, next);
@@ -102,7 +98,7 @@ public class ValidatorHandler implements MiddlewareHandler {
         } else {
             // invalid GraphQL method
             Status status = new Status(STATUS_GRAPHQL_INVALID_METHOD, method);
-            logger.error("ValidationError:" + status.toString());
+            logger.error("ValidationError:{}", status.toString());
             exchange.setStatusCode(status.getStatusCode());
             exchange.getResponseHeaders().put(Headers.ALLOW, "GET, POST, OPTIONS");
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
@@ -124,14 +120,6 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     @Override
     public boolean isEnabled() {
-        return config.isEnabled();
+        return ValidatorConfig.load().isEnabled();
     }
-    /*
-    @Override
-    public void reload() {
-        ValidatorConfig.reload(GRAPHQL_CONFIG_NAME);
-        config = ValidatorConfig.load(GRAPHQL_CONFIG_NAME);
-        ModuleRegistry.registerModule(GRAPHQL_CONFIG_NAME, ValidatorHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(GRAPHQL_CONFIG_NAME), null);
-    }
-    */
 }

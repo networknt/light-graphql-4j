@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * GraphQL validator configuration class
@@ -32,11 +31,6 @@ public class ValidatorConfig {
     private static final String ENABLED = "enabled";
     private static final String LOG_ERROR = "logError";
 
-    private Map<String, Object> mappedConfig;
-
-    private static final Map<String, ValidatorConfig> instances = new ConcurrentHashMap<>();
-
-    // --- Annotated Fields ---
     @BooleanField(
             configFieldName = ENABLED,
             externalizedKeyName = ENABLED,
@@ -53,53 +47,41 @@ public class ValidatorConfig {
     )
     private boolean logError;
 
+    private final Map<String, Object> mappedConfig;
+    private static ValidatorConfig instance;
+
 
     // --- Constructor and Loading Logic ---
 
     private ValidatorConfig(String configName) {
-        mappedConfig = Config.getInstance().getJsonMapConfigNoCache(configName);
+        mappedConfig = Config.getInstance().getJsonMapConfig(configName);
         setConfigData();
-    }
-    private ValidatorConfig() {
-        this(CONFIG_NAME);
     }
 
     public static ValidatorConfig load(String configName) {
-        ValidatorConfig instance = instances.get(configName);
-        if (instance != null) {
-            return instance;
-        }
-        synchronized (ValidatorConfig.class) {
-            instance = instances.get(configName);
-            if (instance != null) {
+        if (CONFIG_NAME.equals(configName)) {
+            Map<String, Object> mappedConfig = Config.getInstance().getJsonMapConfig(configName);
+            if (instance != null && instance.getMappedConfig() == mappedConfig) {
                 return instance;
             }
-            instance = new ValidatorConfig(configName);
-            instances.put(configName, instance);
-            if (CONFIG_NAME.equals(configName)) {
+            synchronized (ValidatorConfig.class) {
+                mappedConfig = Config.getInstance().getJsonMapConfig(configName);
+                if (instance != null && instance.getMappedConfig() == mappedConfig) {
+                    return instance;
+                }
+                instance = new ValidatorConfig(configName);
                 ModuleRegistry.registerModule(CONFIG_NAME, ValidatorConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+                return instance;
             }
-            return instance;
         }
+        return new ValidatorConfig(configName);
     }
 
     public static ValidatorConfig load() {
         return load(CONFIG_NAME);
     }
 
-    public static void reload() {
-        reload(CONFIG_NAME);
-    }
 
-    public static void reload(String configName) {
-        synchronized (ValidatorConfig.class) {
-            ValidatorConfig instance = new ValidatorConfig(configName);
-            instances.put(configName, instance);
-            if (CONFIG_NAME.equals(configName)) {
-                ModuleRegistry.registerModule(CONFIG_NAME, ValidatorConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
-            }
-        }
-    }
 
     // --- Getters and Setters (Original Methods) ---
 

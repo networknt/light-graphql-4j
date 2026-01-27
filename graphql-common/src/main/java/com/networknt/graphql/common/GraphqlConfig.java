@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Main configuration class for graphql framework that defines the path for
@@ -32,12 +31,6 @@ public class GraphqlConfig {
     private static final String SUBSCRIPTIONS_PATH = "subscriptionsPath";
     private static final String ENABLE_GRAPHIQL = "enableGraphiQL";
 
-
-    private Map<String, Object> mappedConfig;
-    private static final Map<String, GraphqlConfig> instances = new ConcurrentHashMap<>();
-
-
-    // --- Annotated Fields ---
     @StringField(
             configFieldName = PATH,
             externalizedKeyName = PATH,
@@ -62,15 +55,14 @@ public class GraphqlConfig {
     )
     private boolean enableGraphiQL;
 
+    private final Map<String, Object> mappedConfig;
+    private static GraphqlConfig instance;
+
 
     // --- Constructor and Loading Logic ---
 
-    public GraphqlConfig() {
-        this(CONFIG_NAME);
-    }
-
     private GraphqlConfig(String configName) {
-        mappedConfig = Config.getInstance().getJsonMapConfigNoCache(configName);
+        mappedConfig = Config.getInstance().getJsonMapConfig(configName);
         setConfigData();
     }
 
@@ -79,40 +71,28 @@ public class GraphqlConfig {
     }
 
     public static GraphqlConfig load(String configName) {
-        GraphqlConfig instance = instances.get(configName);
-        if (instance != null) {
-            return instance;
-        }
-        synchronized (GraphqlConfig.class) {
-            instance = instances.get(configName);
-            if (instance != null) {
+        if (CONFIG_NAME.equals(configName)) {
+            Map<String, Object> mappedConfig = Config.getInstance().getJsonMapConfig(configName);
+            if (instance != null && instance.getMappedConfig() == mappedConfig) {
                 return instance;
             }
-            instance = new GraphqlConfig(configName);
-            instances.put(configName, instance);
-            if (CONFIG_NAME.equals(configName)) {
+            synchronized (GraphqlConfig.class) {
+                mappedConfig = Config.getInstance().getJsonMapConfig(configName);
+                if (instance != null && instance.getMappedConfig() == mappedConfig) {
+                    return instance;
+                }
+                instance = new GraphqlConfig(configName);
                 ModuleRegistry.registerModule(CONFIG_NAME, GraphqlConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
-            }
-            return instance;
-        }
-    }
-
-    public static void reload() {
-        reload(CONFIG_NAME);
-    }
-
-    public static void reload(String configName) {
-        synchronized (GraphqlConfig.class) {
-            GraphqlConfig instance = new GraphqlConfig(configName);
-            instances.put(configName, instance);
-            if (CONFIG_NAME.equals(configName)) {
-                ModuleRegistry.registerModule(CONFIG_NAME, GraphqlConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+                return instance;
             }
         }
+        return new GraphqlConfig(configName);
     }
 
+    public Map<String, Object> getMappedConfig() {
+        return mappedConfig;
+    }
 
-    // --- Private Config Loader ---
     private void setConfigData() {
         Object object = mappedConfig.get(PATH);
         if (object != null) path = (String)object;

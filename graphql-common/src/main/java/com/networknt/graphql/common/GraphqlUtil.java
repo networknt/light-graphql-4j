@@ -14,5 +14,5 @@ public class GraphqlUtil {
 
     public static final AttachmentKey<Object> GRAPHQL_PARAMS = AttachmentKey.create(Object.class);
 
-    public static GraphqlConfig config = (GraphqlConfig) Config.getInstance().getJsonObjectConfig(CONFIG_NAME, GraphqlConfig.class);
+    public static GraphqlConfig config = GraphqlConfig.load();
 }
