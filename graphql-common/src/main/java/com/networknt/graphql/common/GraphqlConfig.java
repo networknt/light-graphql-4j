@@ -56,7 +56,7 @@ public class GraphqlConfig {
     private boolean enableGraphiQL;
 
     private final Map<String, Object> mappedConfig;
-    private static GraphqlConfig instance;
+    private static volatile GraphqlConfig instance;
 
 
     // --- Constructor and Loading Logic ---

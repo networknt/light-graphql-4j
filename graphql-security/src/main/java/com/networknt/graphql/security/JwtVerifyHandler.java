@@ -80,12 +80,21 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
+        SecurityConfig newConfig = SecurityConfig.load();
+        if(newConfig != config) {
+            synchronized (this) {
+                if(newConfig != config) {
+                    config = newConfig;
+                    jwtVerifier = new JwtVerifier(config);
+                }
+            }
+        }
         String reqPath = exchange.getRequestPath();
         if(logger.isTraceEnabled()) logger.debug("handleRequest with request path {}", reqPath);
         // if request path is in the skipPathPrefixes in the config, call the next handler directly to skip the security check.
         if (config.getSkipPathPrefixes() != null && config.getSkipPathPrefixes().stream().anyMatch(reqPath::startsWith)) {
             if(logger.isTraceEnabled())
-                logger.trace("Skip request path base on skipPathPrefixes for " + reqPath);
+                logger.trace("Skip request path base on skipPathPrefixes for {}", reqPath);
             Handler.next(exchange, next);
             if (logger.isDebugEnabled())
                 logger.debug("JwtVerifyHandler.handleRequest ends.");
@@ -238,15 +247,6 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
     public boolean isEnabled() {
         return config.isEnableVerifyJwt();
     }
-    /*
-    @Override
-    public void reload() {
-        SecurityConfig.reload();
-        config = SecurityConfig.load();
-        jwtVerifier = new JwtVerifier(config);
-        ModuleRegistry.registerModule(SecurityConfig.CONFIG_NAME, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(SecurityConfig.CONFIG_NAME), null);
-    }
-    */
 
     @Override
     public JwtVerifier getJwtVerifier() {

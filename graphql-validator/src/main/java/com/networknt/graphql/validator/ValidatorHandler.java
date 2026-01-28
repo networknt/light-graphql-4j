@@ -63,6 +63,7 @@ public class ValidatorHandler implements MiddlewareHandler {
 
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
+        ValidatorConfig config = ValidatorConfig.load();
         String path = exchange.getRequestPath();
         if(!path.equals(GraphqlUtil.config.getPath()) && !path.equals(GraphqlUtil.config.getSubscriptionsPath())) {
             // invalid GraphQL path
