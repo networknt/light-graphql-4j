@@ -24,7 +24,7 @@ public class GraphqlGetHandler implements HttpHandler {
     public void handleRequest(HttpServerExchange exchange) {
         @SuppressWarnings("unchecked")
         Map<String, Object> requestParameters = (Map<String, Object>)exchange.getAttachment(GraphqlUtil.GRAPHQL_PARAMS);
-        if(logger.isDebugEnabled()) logger.debug("requestParameters: " + requestParameters);
+        if(logger.isDebugEnabled()) logger.debug("requestParameters: {}", requestParameters);
         String graphiql = RenderGraphiQL.render(requestParameters, null);
         exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/html; charset=UTF-8");
         exchange.setStatusCode(StatusCodes.OK);

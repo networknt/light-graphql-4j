@@ -5,6 +5,7 @@ import com.networknt.config.schema.ConfigSchema; // REQUIRED IMPORT
 import com.networknt.config.schema.OutputFormat; // REQUIRED IMPORT
 import com.networknt.config.schema.BooleanField; // REQUIRED IMPORT
 import com.networknt.config.schema.StringField; // REQUIRED IMPORT
+import com.networknt.server.ModuleRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,11 +31,6 @@ public class GraphqlConfig {
     private static final String SUBSCRIPTIONS_PATH = "subscriptionsPath";
     private static final String ENABLE_GRAPHIQL = "enableGraphiQL";
 
-    private final Config config;
-    private Map<String, Object> mappedConfig;
-
-
-    // --- Annotated Fields ---
     @StringField(
             configFieldName = PATH,
             externalizedKeyName = PATH,
@@ -59,34 +55,44 @@ public class GraphqlConfig {
     )
     private boolean enableGraphiQL;
 
+    private final Map<String, Object> mappedConfig;
+    private static volatile GraphqlConfig instance;
+
 
     // --- Constructor and Loading Logic ---
 
-    public GraphqlConfig() {
-        this(CONFIG_NAME);
-    }
-
     private GraphqlConfig(String configName) {
-        config = Config.getInstance();
-        mappedConfig = config.getJsonMapConfigNoCache(configName);
+        mappedConfig = Config.getInstance().getJsonMapConfig(configName);
         setConfigData();
     }
 
     public static GraphqlConfig load() {
-        return new GraphqlConfig();
+        return load(CONFIG_NAME);
     }
 
     public static GraphqlConfig load(String configName) {
+        if (CONFIG_NAME.equals(configName)) {
+            Map<String, Object> mappedConfig = Config.getInstance().getJsonMapConfig(configName);
+            if (instance != null && instance.getMappedConfig() == mappedConfig) {
+                return instance;
+            }
+            synchronized (GraphqlConfig.class) {
+                mappedConfig = Config.getInstance().getJsonMapConfig(configName);
+                if (instance != null && instance.getMappedConfig() == mappedConfig) {
+                    return instance;
+                }
+                instance = new GraphqlConfig(configName);
+                ModuleRegistry.registerModule(CONFIG_NAME, GraphqlConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+                return instance;
+            }
+        }
         return new GraphqlConfig(configName);
     }
 
-    public void reload() {
-        mappedConfig = config.getJsonMapConfigNoCache(CONFIG_NAME);
-        setConfigData();
+    public Map<String, Object> getMappedConfig() {
+        return mappedConfig;
     }
 
-
-    // --- Private Config Loader ---
     private void setConfigData() {
         Object object = mappedConfig.get(PATH);
         if (object != null) path = (String)object;

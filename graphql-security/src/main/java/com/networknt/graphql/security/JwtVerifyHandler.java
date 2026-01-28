@@ -27,7 +27,7 @@ import com.networknt.exception.ExpiredTokenException;
 import com.networknt.security.JwtVerifier;
 import com.networknt.security.SecurityConfig;
 import com.networknt.utility.Constants;
-import com.networknt.utility.ModuleRegistry;
+import com.networknt.server.ModuleRegistry;
 import io.undertow.Handlers;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -80,12 +80,21 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
 
     @Override
     public void handleRequest(final HttpServerExchange exchange) throws Exception {
+        SecurityConfig newConfig = SecurityConfig.load();
+        if(newConfig != config) {
+            synchronized (this) {
+                if(newConfig != config) {
+                    config = newConfig;
+                    jwtVerifier = new JwtVerifier(config);
+                }
+            }
+        }
         String reqPath = exchange.getRequestPath();
         if(logger.isTraceEnabled()) logger.debug("handleRequest with request path {}", reqPath);
         // if request path is in the skipPathPrefixes in the config, call the next handler directly to skip the security check.
         if (config.getSkipPathPrefixes() != null && config.getSkipPathPrefixes().stream().anyMatch(reqPath::startsWith)) {
             if(logger.isTraceEnabled())
-                logger.trace("Skip request path base on skipPathPrefixes for " + reqPath);
+                logger.trace("Skip request path base on skipPathPrefixes for {}", reqPath);
             Handler.next(exchange, next);
             if (logger.isDebugEnabled())
                 logger.debug("JwtVerifyHandler.handleRequest ends.");
@@ -237,17 +246,6 @@ public class JwtVerifyHandler implements MiddlewareHandler, IJwtVerifyHandler {
     @Override
     public boolean isEnabled() {
         return config.isEnableVerifyJwt();
-    }
-
-    @Override
-    public void register() {
-        ModuleRegistry.registerModule(SecurityConfig.CONFIG_NAME, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(SecurityConfig.CONFIG_NAME), null);
-    }
-
-    @Override
-    public void reload() {
-        config.reload();
-        ModuleRegistry.registerModule(SecurityConfig.CONFIG_NAME, JwtVerifyHandler.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(SecurityConfig.CONFIG_NAME), null);
     }
 
     @Override

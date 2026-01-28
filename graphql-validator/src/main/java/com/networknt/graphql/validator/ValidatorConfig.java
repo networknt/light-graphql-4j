@@ -4,6 +4,7 @@ import com.networknt.config.Config;
 import com.networknt.config.schema.ConfigSchema; // REQUIRED IMPORT
 import com.networknt.config.schema.OutputFormat; // REQUIRED IMPORT
 import com.networknt.config.schema.BooleanField; // REQUIRED IMPORT
+import com.networknt.server.ModuleRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,10 +31,6 @@ public class ValidatorConfig {
     private static final String ENABLED = "enabled";
     private static final String LOG_ERROR = "logError";
 
-    private Map<String, Object> mappedConfig;
-    private final Config config;
-
-    // --- Annotated Fields ---
     @BooleanField(
             configFieldName = ENABLED,
             externalizedKeyName = ENABLED,
@@ -50,35 +47,41 @@ public class ValidatorConfig {
     )
     private boolean logError;
 
+    private final Map<String, Object> mappedConfig;
+    private static ValidatorConfig instance;
+
 
     // --- Constructor and Loading Logic ---
 
     private ValidatorConfig(String configName) {
-        config = Config.getInstance();
-        mappedConfig = config.getJsonMapConfigNoCache(configName);
+        mappedConfig = Config.getInstance().getJsonMapConfig(configName);
         setConfigData();
-    }
-    private ValidatorConfig() {
-        this(CONFIG_NAME);
     }
 
     public static ValidatorConfig load(String configName) {
+        if (CONFIG_NAME.equals(configName)) {
+            Map<String, Object> mappedConfig = Config.getInstance().getJsonMapConfig(configName);
+            if (instance != null && instance.getMappedConfig() == mappedConfig) {
+                return instance;
+            }
+            synchronized (ValidatorConfig.class) {
+                mappedConfig = Config.getInstance().getJsonMapConfig(configName);
+                if (instance != null && instance.getMappedConfig() == mappedConfig) {
+                    return instance;
+                }
+                instance = new ValidatorConfig(configName);
+                ModuleRegistry.registerModule(CONFIG_NAME, ValidatorConfig.class.getName(), Config.getNoneDecryptedInstance().getJsonMapConfigNoCache(CONFIG_NAME), null);
+                return instance;
+            }
+        }
         return new ValidatorConfig(configName);
     }
 
     public static ValidatorConfig load() {
-        return new ValidatorConfig();
+        return load(CONFIG_NAME);
     }
 
-    public void reload() {
-        mappedConfig = config.getJsonMapConfigNoCache(CONFIG_NAME);
-        setConfigData();
-    }
 
-    public void reload(String configName) {
-        mappedConfig = config.getJsonMapConfigNoCache(configName);
-        setConfigData();
-    }
 
     // --- Getters and Setters (Original Methods) ---
 
