@@ -104,7 +104,7 @@
         <version.junit>4.13.2</version.junit>
         <version.mockito>2.10.0</version.mockito>
         <version.undertow>2.3.22.Final</version.undertow>
-        <version.assertj>3.8.0</version.assertj>
+        <version.assertj>3.27.7</version.assertj>
         <version.graphql>22.2</version.graphql>
         <versions.maven-version>2.4</versions.maven-version>
         <version.javadoc-packagelist-plugin>1.0.0</version.javadoc-packagelist-plugin>
