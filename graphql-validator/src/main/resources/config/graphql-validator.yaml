@@ -2,7 +2,7 @@
 # frameworks in the same server instance and it is recommended. The old validator.yml will be loaded
 # if graphql-validator.yml cannot be found for backward compatibility and it might be removed in the
 # next major release.
-# 
+#
 # Enable request validation against the specification.
 enabled: ${graphql-validator.enabled:true}
 # Log error message if validation error occurs.
