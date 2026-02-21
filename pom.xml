@@ -101,7 +101,7 @@
         <version.jose4j>0.9.6</version.jose4j>
         <version.commons-text>1.15.0</version.commons-text>
         <version.logback>1.5.26</version.logback>
-        <version.junit>4.13.2</version.junit>
+        <version.junit>5.11.4</version.junit>
         <version.mockito>2.10.0</version.mockito>
         <version.undertow>2.3.22.Final</version.undertow>
         <version.assertj>3.27.7</version.assertj>
@@ -310,8 +310,8 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
                 <version>${version.junit}</version>
                 <scope>test</scope>
             </dependency>
@@ -402,14 +402,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>2.19.1</version>
-                    </dependency>
-                </dependencies>
+                <version>3.5.2</version>
             </plugin>
             <!-- JACOCO added for code coverage -->
             <plugin>
@@ -505,7 +498,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.20.1</version>
+                <version>3.5.2</version>
             </plugin>
         </plugins>
     </reporting>

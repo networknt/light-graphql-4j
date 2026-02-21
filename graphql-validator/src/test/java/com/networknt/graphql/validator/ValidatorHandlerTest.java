@@ -30,10 +30,10 @@ import io.undertow.server.HttpHandler;
 import io.undertow.server.RoutingHandler;
 import io.undertow.util.Headers;
 import io.undertow.util.Methods;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnio.IoUtils;
@@ -55,7 +55,7 @@ public class ValidatorHandlerTest {
 
     private static Undertow server = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         if(server == null) {
             logger.info("starting server");
@@ -70,7 +70,7 @@ public class ValidatorHandlerTest {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         if(server != null) {
             try {
@@ -122,10 +122,10 @@ public class ValidatorHandlerTest {
         }
         int statusCode = reference.get().getResponseCode();
         String body = reference.get().getAttachment(Http2Client.RESPONSE_BODY);
-        Assert.assertEquals(400, statusCode);
+        Assertions.assertEquals(400, statusCode);
         if(statusCode == 400) {
             Status status = Config.getInstance().getMapper().readValue(body, Status.class);
-            Assert.assertEquals("ERR11500", status.getCode());
+            Assertions.assertEquals("ERR11500", status.getCode());
         }
     }
 
@@ -169,10 +169,10 @@ public class ValidatorHandlerTest {
         }
         int statusCode = reference.get().getResponseCode();
         String body = reference.get().getAttachment(Http2Client.RESPONSE_BODY);
-        Assert.assertEquals(400, statusCode);
+        Assertions.assertEquals(400, statusCode);
         if(statusCode == 400) {
             Status status = Config.getInstance().getMapper().readValue(body, Status.class);
-            Assert.assertEquals("ERR11500", status.getCode());
+            Assertions.assertEquals("ERR11500", status.getCode());
         }
     }
 
@@ -209,10 +209,10 @@ public class ValidatorHandlerTest {
         }
         int statusCode = reference.get().getResponseCode();
         String body = reference.get().getAttachment(Http2Client.RESPONSE_BODY);
-        Assert.assertEquals(405, statusCode);
+        Assertions.assertEquals(405, statusCode);
         if(statusCode == 405) {
             Status status = Config.getInstance().getMapper().readValue(body, Status.class);
-            Assert.assertEquals("ERR11501", status.getCode());
+            Assertions.assertEquals("ERR11501", status.getCode());
         }
     }
 
@@ -257,9 +257,9 @@ public class ValidatorHandlerTest {
         }
         int statusCode = reference.get().getResponseCode();
         String body = reference.get().getAttachment(Http2Client.RESPONSE_BODY);
-        Assert.assertEquals(200, statusCode);
+        Assertions.assertEquals(200, statusCode);
         if(statusCode == 200) {
-            Assert.assertNotNull(body);
+            Assertions.assertNotNull(body);
         }
 
     }

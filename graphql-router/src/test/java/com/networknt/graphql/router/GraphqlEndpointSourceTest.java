@@ -1,8 +1,8 @@
 package com.networknt.graphql.router;
 
 import com.networknt.handler.config.EndpointSource;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,7 +24,7 @@ public class GraphqlEndpointSourceTest {
             .collect(Collectors.toSet());
 
         // Assert that we got what we wanted
-        Assert.assertEquals(
+        Assertions.assertEquals(
             new HashSet<>(Arrays.asList(
                 "/graphql@GET",
                 "/graphql@POST",

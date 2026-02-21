@@ -1,6 +1,6 @@
 package com.networknt.graphql.common;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * A unit test class for GraphqlUtil
