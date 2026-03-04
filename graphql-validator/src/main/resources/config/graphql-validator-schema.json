@@ -5,11 +5,13 @@
   "properties" : {
     "enabled" : {
       "type" : "boolean",
-      "description" : "Enable request validation against the specification."
+      "description" : "Enable request validation against the specification.",
+      "default" : true
     },
     "logError" : {
       "type" : "boolean",
-      "description" : "Log error message if validation error occurs."
+      "description" : "Log error message if validation error occurs.",
+      "default" : true
     }
   }
 }

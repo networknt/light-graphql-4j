@@ -15,7 +15,8 @@
     },
     "enableGraphiQL" : {
       "type" : "boolean",
-      "description" : "Enable GraphiQL for development environment only. It allows testing from the Browser."
+      "description" : "Enable GraphiQL for development environment only. It allows testing from the Browser.",
+      "default" : true
     }
   }
 }
