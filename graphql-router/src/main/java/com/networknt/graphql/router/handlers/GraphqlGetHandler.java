@@ -22,6 +22,11 @@ public class GraphqlGetHandler implements HttpHandler {
 
     @Override
     public void handleRequest(HttpServerExchange exchange) {
+        if (!GraphqlUtil.config.isEnableGraphiQL()) {
+            exchange.setStatusCode(StatusCodes.NOT_FOUND);
+            exchange.getResponseSender().send("GraphiQL is disabled.");
+            return;
+        }
         @SuppressWarnings("unchecked")
         Map<String, Object> requestParameters = (Map<String, Object>)exchange.getAttachment(GraphqlUtil.GRAPHQL_PARAMS);
         if(logger.isDebugEnabled()) logger.debug("requestParameters: {}", requestParameters);

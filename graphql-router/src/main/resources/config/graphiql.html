@@ -1,144 +1,219 @@
-<!--
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the license found in the
- *  LICENSE file in the root directory of this source tree.
--->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphQL Console</title>
     <style>
-        body {
-            height: 100%;
-            margin: 0;
-            width: 100%;
-            overflow: hidden;
+        :root {
+            color-scheme: light;
+            font-family: Arial, Helvetica, sans-serif;
         }
-        #graphiql {
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
             height: 100vh;
+            margin: 0;
+            background: #f6f7f9;
+            color: #1f2933;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 16px;
+            height: 100vh;
+            padding: 16px;
+        }
+
+        section {
+            display: flex;
+            min-width: 0;
+            min-height: 0;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        label {
+            display: flex;
+            min-height: 0;
+            flex: 1;
+            flex-direction: column;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        textarea,
+        input,
+        pre {
+            width: 100%;
+            border: 1px solid #c8d0d9;
+            border-radius: 4px;
+            background: #ffffff;
+            color: #1f2933;
+            font: 14px/1.45 Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        textarea {
+            min-height: 0;
+            flex: 1;
+            resize: none;
+            padding: 10px;
+        }
+
+        input {
+            padding: 9px 10px;
+        }
+
+        pre {
+            min-height: 0;
+            flex: 1;
+            margin: 0;
+            overflow: auto;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+
+        button {
+            align-self: flex-start;
+            border: 0;
+            border-radius: 4px;
+            background: #0969da;
+            color: #ffffff;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 9px 14px;
+        }
+
+        button:disabled {
+            background: #8aa4c1;
+            cursor: progress;
+        }
+
+        .response-title {
+            font-weight: 600;
+        }
+
+        @media (max-width: 800px) {
+            main {
+                grid-template-columns: 1fr;
+                grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+            }
         }
     </style>
-
-    <!--
-      This GraphiQL example depends on Promise and fetch, which are available in
-      modern browsers, but can be "polyfilled" for older browsers.
-      GraphiQL itself depends on React DOM.
-      If you do not want to rely on a CDN, you can host these files locally or
-      include them directly in your favored resource bunder.
-    -->
-    <script src="//cdn.jsdelivr.net/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
-    <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
-    <script src="//cdn.jsdelivr.net/react/15.4.2/react.min.js"></script>
-    <script src="//cdn.jsdelivr.net/react/15.4.2/react-dom.min.js"></script>
-
-    <!-- Subscription Support -->
-    <script src="//unpkg.com/subscriptions-transport-ws@0.9.5/browser/client.js"></script>
-    <script>${GRAPHIQL_SUBSCRIPTION_FETCHER}</script>
-
-    <!--
-      These two files can be found in the npm module, however you may wish to
-      copy them directly into your environment, or perhaps include them in your
-      favored resource bundler.
-     -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/graphiql/0.11.11/graphiql.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/graphiql/0.11.11/graphiql.js"></script>
-
 </head>
 <body>
-<div id="graphiql">Loading...</div>
+<main>
+    <section>
+        <label>
+            Query
+            <textarea id="query" spellcheck="false" autocomplete="off"></textarea>
+        </label>
+        <label>
+            Variables
+            <textarea id="variables" spellcheck="false" autocomplete="off"></textarea>
+        </label>
+        <label>
+            Operation Name
+            <input id="operationName" type="text" autocomplete="off">
+        </label>
+        <button id="execute" type="button">Execute</button>
+    </section>
+    <section>
+        <div class="response-title">Response</div>
+        <pre id="response"></pre>
+    </section>
+</main>
 <script>
-    /**
-     * This GraphiQL example illustrates how to use some of GraphiQL's props
-     * in order to enable reading and updating the URL parameters, making
-     * link sharing of queries a little bit easier.
-     *
-     * This is only one example of this kind of feature, GraphiQL exposes
-     * various React params to enable interesting integrations.
-     */
-        // Parse the search string to get url parameters.
-    var search = window.location.search;
-    var parameters = {};
-    search.substr(1).split('&').forEach(function (entry) {
-        var eq = entry.indexOf('=');
-        if (eq >= 0) {
-            parameters[decodeURIComponent(entry.slice(0, eq))] =
-                decodeURIComponent(entry.slice(eq + 1));
-        }
-    });
-    // if variables was provided, try to format it.
-    if (parameters.variables) {
-        try {
-            parameters.variables =
-                JSON.stringify(JSON.parse(parameters.variables), null, 2);
-        } catch (e) {
-            // Do nothing, we want to display the invalid JSON as a string, rather
-            // than present an error.
-        }
-    }
-    // When the query and variables string is edited, update the URL bar so
-    // that it can be easily shared
-    function onEditQuery(newQuery) {
-        parameters.query = newQuery;
-        updateURL();
-    }
-    function onEditVariables(newVariables) {
-        parameters.variables = newVariables;
-        updateURL();
-    }
-    function onEditOperationName(newOperationName) {
-        parameters.operationName = newOperationName;
-        updateURL();
-    }
-    function updateURL() {
-        var newSearch = '?' + Object.keys(parameters).filter(function (key) {
-            return Boolean(parameters[key]);
-        }).map(function (key) {
-            return encodeURIComponent(key) + '=' +
-                encodeURIComponent(parameters[key]);
-        }).join('&');
-        history.replaceState(null, null, newSearch);
-    }
+    (function () {
+        'use strict';
 
-    // Defines a GraphQL fetcher using the fetch API.
-    function graphQLFetcher(graphQLParams) {
-        return fetch('/graphql', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(graphQLParams),
-            credentials: 'include'
-        }).then(function (response) {
-            return response.text();
-        }).then(function (responseBody) {
-            try {
-                return JSON.parse(responseBody);
-            } catch (error) {
-                return responseBody;
+        var queryInput = document.getElementById('query');
+        var variablesInput = document.getElementById('variables');
+        var operationNameInput = document.getElementById('operationName');
+        var executeButton = document.getElementById('execute');
+        var responseOutput = document.getElementById('response');
+        var params = new URLSearchParams(window.location.search);
+
+        queryInput.value = params.get('query') || '';
+        operationNameInput.value = params.get('operationName') || '';
+        variablesInput.value = formatVariables(params.get('variables'));
+
+        queryInput.addEventListener('input', updateURL);
+        variablesInput.addEventListener('input', updateURL);
+        operationNameInput.addEventListener('input', updateURL);
+        executeButton.addEventListener('click', executeQuery);
+
+        function formatVariables(value) {
+            if (!value) {
+                return '';
             }
-        });
+            try {
+                return JSON.stringify(JSON.parse(value), null, 2);
+            } catch (error) {
+                return value;
+            }
+        }
 
-    }
+        function updateURL() {
+            var newParams = new URLSearchParams();
+            if (queryInput.value) {
+                newParams.set('query', queryInput.value);
+            }
+            if (variablesInput.value) {
+                newParams.set('variables', variablesInput.value);
+            }
+            if (operationNameInput.value) {
+                newParams.set('operationName', operationNameInput.value);
+            }
+            var queryString = newParams.toString();
+            history.replaceState(null, '', queryString ? '?' + queryString : window.location.pathname);
+        }
 
-    var subscriptionsEndpoint = 'ws://' + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + '/subscriptions';
-    var subscriptionsClient = new window.SubscriptionsTransportWs.SubscriptionClient(subscriptionsEndpoint, {
-        reconnect: true
-    });
-    var subscriptionEnabledFetcher = window.GraphiQLSubscriptionsFetcher.graphQLFetcher(subscriptionsClient, graphQLFetcher);
-    // Render <GraphiQL /> into the body.
-    ReactDOM.render(
-        React.createElement(GraphiQL, {
-            fetcher: subscriptionEnabledFetcher,
-            query: parameters.query,
-            variables: parameters.variables,
-            operationName: parameters.operationName,
-            onEditQuery: onEditQuery,
-            onEditVariables: onEditVariables,
-            onEditOperationName: onEditOperationName
-        }),
-        document.getElementById('graphiql')
-    );
-</script>  </body>
+        function executeQuery() {
+            var body = {
+                query: queryInput.value,
+                operationName: operationNameInput.value || null
+            };
+
+            if (variablesInput.value) {
+                try {
+                    body.variables = JSON.parse(variablesInput.value);
+                } catch (error) {
+                    responseOutput.textContent = 'Variables must be valid JSON.';
+                    return;
+                }
+            }
+
+            executeButton.disabled = true;
+            responseOutput.textContent = 'Loading...';
+
+            fetch('/graphql', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body),
+                credentials: 'include'
+            }).then(function (response) {
+                return response.text();
+            }).then(function (responseBody) {
+                try {
+                    responseOutput.textContent = JSON.stringify(JSON.parse(responseBody), null, 2);
+                } catch (error) {
+                    responseOutput.textContent = responseBody;
+                }
+            }).catch(function (error) {
+                responseOutput.textContent = String(error);
+            }).finally(function () {
+                executeButton.disabled = false;
+            });
+        }
+    }());
+</script>
+</body>
 </html>
