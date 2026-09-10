@@ -48,7 +48,7 @@ public class ValidatorConfig {
     private boolean logError;
 
     private final Map<String, Object> mappedConfig;
-    private static ValidatorConfig instance;
+    private static volatile ValidatorConfig instance;
 
 
     // --- Constructor and Loading Logic ---
