@@ -1,5 +1,25 @@
 # Change Log
 
+## [2.4.0](https://github.com/networknt/light-graphql-4j/tree/2.4.0) (2026-10-07)
+
+**Commits:**
+
+- upgrade to version 2.4.0 before release in master branch ([7fe6856](https://github.com/networknt/light-graphql-4j/commit/7fe68566dfe1435a0b9a01ddf2b0db0fa81365c4)) (by Steve Hu)
+- upgrade maven-javadoc to 3.12.0 from 3.4.1 ([71033bd](https://github.com/networknt/light-graphql-4j/commit/71033bd88da6919ee7355aefed9105416325f9a4)) (by Steve Hu)
+- upgrade maven-version to 2.22.0 from 2.4 ([624e655](https://github.com/networknt/light-graphql-4j/commit/624e655ef11f3ad7cf44afcff2bc8be37af758b2)) (by Steve Hu)
+- upgrade mockito to 5.24.0 ([1aab971](https://github.com/networknt/light-graphql-4j/commit/1aab971a6a7e43ff1bf4e64289333a61c77a4488)) (by Steve Hu)
+- upgrade slf4j to 2.0.20 from 2.0.19 ([dd05a25](https://github.com/networknt/light-graphql-4j/commit/dd05a257acdc0cbf494bde20a6ee713495c95ce7)) (by Steve Hu)
+- upgrade jose4j to 0.9.7 from 0.9.6 ([31ac083](https://github.com/networknt/light-graphql-4j/commit/31ac0833ed62ccc0c061f0f6a28f96e8b9ee3959)) (by Steve Hu)
+- upgrade jackson to 2.22.3 from 2.22.1 ([c762778](https://github.com/networknt/light-graphql-4j/commit/c76277879191fb792c2cf81794ceae30bfdc4807)) (by Steve Hu)
+- upgrade to version 2.3.8-SNAPSHOT after release in master branch ([5032b9a](https://github.com/networknt/light-graphql-4j/commit/5032b9a0c4c22592d84744527a5c1421cd19aa09)) (by Steve Hu)
+- upgrade slf4j to 2.0.19 from 2.0.17 ([9ce970f](https://github.com/networknt/light-graphql-4j/commit/9ce970f66b4f6988496d6b4b1bd49229650e32ab)) (by Steve Hu)
+- upgrade maven-surefire to 3.6.0 ([7afcc58](https://github.com/networknt/light-graphql-4j/commit/7afcc58689fa1a582fcf25890c0a99a5bb9dfab1)) (by Steve Hu)
+- upgrade logback to 1.6.3 from 1.5.37 ([133fe7c](https://github.com/networknt/light-graphql-4j/commit/133fe7c086bef0d272eea1b8fdb33be0b620f2f5)) (by Steve Hu)
+- Remove obsolete javadoc-packagelist-maven-plugin workaround ([882459e](https://github.com/networknt/light-graphql-4j/commit/882459ebfdce7d8bba57eab0c263611cb4660745)) (by Steve Hu)
+- upgrade central-publishing-maven to 0.11.0 from 0.7.0 ([77cdaf4](https://github.com/networknt/light-graphql-4j/commit/77cdaf4e72b285468a310ff175a3f30494c8bf9c)) (by Steve Hu)
+- fixes #140 Safely publish the graphql ValidatorConfig cached singleton ([37f8bba](https://github.com/networknt/light-graphql-4j/commit/37f8bba169b8b8b53b9fbc8e5ccd17f60289e0f5)) (by Steve Hu)
+- upgrade to version 2.3.8-SNAPSHOT after release in master branch ([e4a4f15](https://github.com/networknt/light-graphql-4j/commit/e4a4f15ad50c01b730457fafff3744bf6046038f)) (by Steve Hu)
+
 ## [2.3.7](https://github.com/networknt/light-graphql-4j/tree/2.3.7) (2026-08-12)
 
 
