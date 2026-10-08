@@ -101,7 +101,7 @@
         <version.slf4j>2.0.20</version.slf4j>
         <version.jose4j>0.9.7</version.jose4j>
         <version.commons-text>1.15.0</version.commons-text>
-        <version.logback>1.6.3</version.logback>
+        <version.logback>1.6.5</version.logback>
         <version.junit>5.11.4</version.junit>
         <version.mockito>5.24.0</version.mockito>
         <version.undertow>2.4.1.Final</version.undertow>
