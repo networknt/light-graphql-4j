@@ -1,5 +1,16 @@
 # Change Log
 
+## [2.4.1](https://github.com/networknt/light-graphql-4j/tree/2.4.1) (2026-10-11)
+
+**Commits:**
+
+- upgrade to version 2.4.1 before release in master branch ([2501b87](https://github.com/networknt/light-graphql-4j/commit/2501b87f8424454182ddf3d9d867589a348c3a80)) (by Steve Hu)
+- upgrade maven-gpg to 3.2.8 from 3.2.7 ([2220f8c](https://github.com/networknt/light-graphql-4j/commit/2220f8c654466bdfb8c0757528e4364a088b5bce)) (by Steve Hu)
+- build: upgrade JUnit to 6.1.3 ([0de16e4](https://github.com/networknt/light-graphql-4j/commit/0de16e4a8877a2c559b9cced0520ff0fcd3fb960)) (by Steve Hu)
+- upgrade udertow to 2.4.4.Final from 2.4.1.Final ([e33474a](https://github.com/networknt/light-graphql-4j/commit/e33474ad6ca682199c2fe5476109af90db2f34eb)) (by Steve Hu)
+- upgrade logback to 1.6.5 from 1.6.3 ([1c6198a](https://github.com/networknt/light-graphql-4j/commit/1c6198a6a19ed5ff4ed9484c52d942a647337418)) (by Steve Hu)
+- upgrade to version 2.4.1-SNAPSHOT after release in master branch ([e686bcf](https://github.com/networknt/light-graphql-4j/commit/e686bcf9d6eb68a876a2eec8207b9a841c5e7c26)) (by Steve Hu)
+
 ## [2.4.0](https://github.com/networknt/light-graphql-4j/tree/2.4.0) (2026-10-07)
 
 **Commits:**
