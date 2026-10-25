@@ -70,3 +70,11 @@ IOException callback boundary, so malformed JSON still reaches its onError
 handling instead of escaping as an unchecked parser exception. Connection
 acknowledgements retain the existing JSON shape. The new callback regressions
 exercise malformed input and the actual acknowledgement sender.
+
+The source-build workflow resolves yaml-rule #36 and light-4j #2815 to their
+latest heads while open, then follows their base branches after merge. Other
+prerequisites use master. Each run logs the exact source commits tested and uses
+a fresh Maven repository. Rerun this check after prerequisite changes and before
+merging: an earlier green run qualifies only its recorded commits. Manual
+workflow dispatch is available. Source-build success does not qualify published
+artifact resolution.
