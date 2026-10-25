@@ -110,8 +110,9 @@ public class ValidatorHandlerTest {
         try {
             ClientRequest request = new ClientRequest().setPath("/v1/graphql").setMethod(Methods.GET);
             request.getRequestHeaders().put(Headers.HOST, "localhost");
-            connection.sendRequest(request, client.createClientCallback(reference, latch));
-            latch.await();
+            connection.getIoThread().execute(() ->
+                    connection.sendRequest(request, client.createClientCallback(reference, latch)));
+            Assertions.assertTrue(latch.await(10, TimeUnit.SECONDS), "HTTP fixture response timed out");
         } catch (Exception e) {
             logger.error("Exception: ", e);
             throw new ClientException(e);
@@ -120,6 +121,7 @@ public class ValidatorHandlerTest {
             client.restore(token);
 
         }
+        Assertions.assertNotNull(reference.get(), "HTTP fixture request failed before a response was received");
         int statusCode = reference.get().getResponseCode();
         String body = reference.get().getAttachment(Http2Client.RESPONSE_BODY);
         Assertions.assertEquals(400, statusCode);
@@ -158,7 +160,7 @@ public class ValidatorHandlerTest {
                 connection.sendRequest(request, client.createClientCallback(reference, latch, post));
             });
 
-            latch.await(10, TimeUnit.SECONDS);
+            Assertions.assertTrue(latch.await(10, TimeUnit.SECONDS), "HTTP fixture response timed out");
         } catch (Exception e) {
             logger.error("IOException: ", e);
             throw new ClientException(e);
@@ -167,6 +169,7 @@ public class ValidatorHandlerTest {
             client.restore(token);
 
         }
+        Assertions.assertNotNull(reference.get(), "HTTP fixture request failed before a response was received");
         int statusCode = reference.get().getResponseCode();
         String body = reference.get().getAttachment(Http2Client.RESPONSE_BODY);
         Assertions.assertEquals(400, statusCode);
@@ -197,8 +200,9 @@ public class ValidatorHandlerTest {
         try {
             ClientRequest request = new ClientRequest().setPath("/graphql").setMethod(Methods.DELETE);
             request.getRequestHeaders().put(Headers.HOST, "localhost");
-            connection.sendRequest(request, client.createClientCallback(reference, latch));
-            latch.await();
+            connection.getIoThread().execute(() ->
+                    connection.sendRequest(request, client.createClientCallback(reference, latch)));
+            Assertions.assertTrue(latch.await(10, TimeUnit.SECONDS), "HTTP fixture response timed out");
         } catch (Exception e) {
             logger.error("Exception: ", e);
             throw new ClientException(e);
@@ -207,6 +211,7 @@ public class ValidatorHandlerTest {
             client.restore(token);
 
         }
+        Assertions.assertNotNull(reference.get(), "HTTP fixture request failed before a response was received");
         int statusCode = reference.get().getResponseCode();
         String body = reference.get().getAttachment(Http2Client.RESPONSE_BODY);
         Assertions.assertEquals(405, statusCode);
@@ -246,7 +251,7 @@ public class ValidatorHandlerTest {
                 connection.sendRequest(request, client.createClientCallback(reference, latch, post));
             });
 
-            latch.await(10, TimeUnit.SECONDS);
+            Assertions.assertTrue(latch.await(10, TimeUnit.SECONDS), "HTTP fixture response timed out");
         } catch (Exception e) {
             logger.error("IOException: ", e);
             throw new ClientException(e);
@@ -255,6 +260,7 @@ public class ValidatorHandlerTest {
             client.restore(token);
 
         }
+        Assertions.assertNotNull(reference.get(), "HTTP fixture request failed before a response was received");
         int statusCode = reference.get().getResponseCode();
         String body = reference.get().getAttachment(Http2Client.RESPONSE_BODY);
         Assertions.assertEquals(200, statusCode);
