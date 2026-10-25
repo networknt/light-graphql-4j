@@ -1,6 +1,6 @@
 package com.networknt.graphql.router.handlers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlConstants;
 import com.networknt.graphql.common.InstrumentationLoader;
@@ -68,7 +68,13 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
             protected void onFullTextMessage(WebSocketChannel channel, BufferedTextMessage message) throws IOException {
                 String messageData = message.getData();
                 if(logger.isDebugEnabled()) logger.debug("Message = " + messageData);
-                Map inputData = Config.getInstance().getMapper().readValue(messageData, Map.class);
+                Map inputData;
+                try {
+                    inputData = Config.getInstance().getMapper().readValue(messageData, Map.class);
+                } catch (JacksonException e) {
+                    // Undertow routes only IOException from this callback to onError.
+                    throw new IOException("Unable to parse GraphQL WebSocket message", e);
+                }
 
                 String requestType = (String) inputData.get(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY);
                 // We receive an init when graphiql is initially loaded (no subscription query sent). We
@@ -133,7 +139,7 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
         result.put(GraphqlConstants.GraphqlRouterConstants.GRAPHQL_RESPONSE_PAYLOAD_KEY, nextPayload);
         try {
             WebSockets.sendText(Config.getInstance().getMapper().writeValueAsString(result), channel, null);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             logger.error("Error while processing data response", e);
         }
     }
@@ -176,10 +182,14 @@ public class GraphqlSubscriptionHandler implements WebSocketConnectionCallback {
     /**
      * Helper method to respond with init_success
      */
-    private void sendInitSuccess(WebSocketChannel channel) throws JsonProcessingException {
+    private void sendInitSuccess(WebSocketChannel channel) throws IOException {
         Map<String, Object> outputData = new HashMap<>();
         outputData.put(GraphqlSubscriptionConstants.GRAPHQL_REQ_TYPE_KEY, GraphqlSubscriptionConstants.GQL_CONNECTION_ACK);
-        WebSockets.sendText(Config.getInstance().getMapper().writeValueAsString(outputData), channel, null);
+        try {
+            WebSockets.sendText(Config.getInstance().getMapper().writeValueAsString(outputData), channel, null);
+        } catch (JacksonException e) {
+            throw new IOException("Unable to write GraphQL WebSocket acknowledgement", e);
+        }
     }
 
     /**

@@ -54,3 +54,19 @@ This is the same example like the mutation but is generated from a schema.
 ### [Relay Todo](https://doc.networknt.com/tutorial/graphql/relay-todo/)
 
 This is to show you how to build a GraphQL service that is working with Relayjs.
+
+
+### Jackson 3 development migration
+
+This development line uses Jackson 3.2.3 and the migrated light-4j/http-client
+snapshots. Jackson core/databind APIs use `tools.jackson`; annotations remain
+under `com.fasterxml.jackson.annotation`. JSON policies are inherited from the
+framework Config mapper. Existing project versions are unchanged during
+implementation; coordinate the next-major release before publication.
+
+GraphQL JSON serialization error handlers catch unchecked JacksonException.
+WebSocket message parsing and connection acknowledgements preserve Undertow's
+IOException callback boundary, so malformed JSON still reaches its onError
+handling instead of escaping as an unchecked parser exception. Connection
+acknowledgements retain the existing JSON shape. The new callback regressions
+exercise malformed input and the actual acknowledgement sender.
