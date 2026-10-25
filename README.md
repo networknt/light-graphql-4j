@@ -54,3 +54,36 @@ This is the same example like the mutation but is generated from a schema.
 ### [Relay Todo](https://doc.networknt.com/tutorial/graphql/relay-todo/)
 
 This is to show you how to build a GraphQL service that is working with Relayjs.
+
+
+### Jackson 3 development migration
+
+This development line uses Jackson 3.2.3 and the migrated light-4j/http-client
+snapshots. Jackson core/databind APIs use `tools.jackson`; annotations remain
+under `com.fasterxml.jackson.annotation`. JSON policies are inherited from the
+framework Config mapper. Existing project versions are unchanged during
+implementation; coordinate the next-major release before publication.
+
+GraphQL JSON serialization error handlers catch unchecked JacksonException.
+WebSocket message parsing and connection acknowledgements preserve Undertow's
+IOException callback boundary, so malformed JSON still reaches its onError
+handling instead of escaping as an unchecked parser exception. Connection
+acknowledgements retain the existing JSON shape. The new callback regressions
+exercise malformed input and the actual acknowledgement sender.
+
+The source-build workflow resolves yaml-rule #36 and light-4j #2815 to their
+latest heads while open, then follows their base branches after merge. Other
+prerequisites use master. Each run logs the exact source commits tested and uses
+a fresh Maven repository. Rerun this check after prerequisite changes and before
+merging: an earlier green run qualifies only its recorded commits. Manual
+workflow dispatch is available. Source-build success does not qualify published
+artifact resolution.
+
+Prerequisites are resolved to full commit SHAs before checkout. To replay a
+failed dependency combination, manually dispatch the source-build workflow with
+its uploaded `source-refs.json` contents as the `source_refs` input. Omitted
+repositories resolve their current source head; supplied values must be full
+commit SHAs. Each green result qualifies only the recorded combination.
+
+GitHub manual dispatch requires this workflow to exist on the default branch.
+Before merge, use the recorded commits to reproduce with local source checkouts.

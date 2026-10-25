@@ -16,7 +16,7 @@
 
 package com.networknt.graphql.validator;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import tools.jackson.core.type.TypeReference;
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlUtil;
 import com.networknt.handler.Handler;

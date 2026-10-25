@@ -1,6 +1,6 @@
 package com.networknt.graphql.router.handlers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 import com.networknt.config.Config;
 import com.networknt.graphql.common.GraphqlConstants;
 import com.networknt.graphql.common.GraphqlUtil;
@@ -46,7 +46,7 @@ public class GraphqlOptionsHandler implements HttpHandler {
      * For introspection queries, we execute the built in query supplied in graphql-java without any parameters.
      *
      * @param httpServerExchange exchange
-     * @throws JsonProcessingException json processing exception
+     * @throws JacksonException json processing exception
      */
     @Override
     public void handleRequest(HttpServerExchange httpServerExchange) throws Exception {
